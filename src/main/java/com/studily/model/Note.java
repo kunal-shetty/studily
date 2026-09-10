@@ -14,6 +14,7 @@ public class Note {
     private String pdfPath;
     private String extractedText;
     private String summaryJson;
+    private String mindmapJson;
     private LocalDateTime createdAt;
 
     public Note() {
@@ -36,6 +37,9 @@ public class Note {
 
     public String getSummaryJson() { return summaryJson; }
     public void setSummaryJson(String summaryJson) { this.summaryJson = summaryJson; }
+
+    public String getMindmapJson() { return mindmapJson; }
+    public void setMindmapJson(String mindmapJson) { this.mindmapJson = mindmapJson; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }

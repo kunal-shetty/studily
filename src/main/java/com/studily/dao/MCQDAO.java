@@ -86,6 +86,18 @@ public class MCQDAO {
         }
     }
 
+    public MCQ findById(int id) throws SQLException {
+        String sql = "SELECT id, note_id, question, option_a, option_b, option_c, option_d, "
+                   + "correct_answer, explanation, difficulty FROM mcqs WHERE id = ?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? mapRow(rs) : null;
+            }
+        }
+    }
+
     private MCQ mapRow(ResultSet rs) throws SQLException {
         MCQ m = new MCQ();
         m.setId(rs.getInt("id"));

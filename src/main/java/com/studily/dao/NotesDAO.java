@@ -46,7 +46,7 @@ public class NotesDAO {
 
     /** Fetch a note only if it belongs to the given user. */
     public Note findByIdAndUser(int noteId, int userId) throws SQLException {
-        String sql = "SELECT note_id, user_id, title, pdf_path, extracted_text, summary, created_at "
+        String sql = "SELECT note_id, user_id, title, pdf_path, extracted_text, summary, mindmap_json, created_at "
                    + "FROM notes WHERE note_id = ? AND user_id = ? LIMIT 1";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -59,7 +59,7 @@ public class NotesDAO {
     }
 
     public List<Note> findRecentByUser(int userId, int limit) throws SQLException {
-        String sql = "SELECT note_id, user_id, title, pdf_path, extracted_text, summary, created_at "
+        String sql = "SELECT note_id, user_id, title, pdf_path, extracted_text, summary, mindmap_json, created_at "
                    + "FROM notes WHERE user_id = ? ORDER BY created_at DESC LIMIT ?";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -98,6 +98,17 @@ public class NotesDAO {
         }
     }
 
+    /** Store the generated mind map JSON. */
+    public void updateMindmap(int noteId, String mindmapJson) throws SQLException {
+        String sql = "UPDATE notes SET mindmap_json = ? WHERE note_id = ?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, mindmapJson);
+            ps.setInt(2, noteId);
+            ps.executeUpdate();
+        }
+    }
+
     private Note mapRow(ResultSet rs) throws SQLException {
         Note n = new Note();
         n.setNoteId(rs.getInt("note_id"));
@@ -106,6 +117,7 @@ public class NotesDAO {
         n.setPdfPath(rs.getString("pdf_path"));
         n.setExtractedText(rs.getString("extracted_text"));
         n.setSummaryJson(rs.getString("summary"));
+        n.setMindmapJson(rs.getString("mindmap_json"));
         Timestamp ts = rs.getTimestamp("created_at");
         n.setCreatedAt(ts == null ? null : ts.toLocalDateTime());
         return n;

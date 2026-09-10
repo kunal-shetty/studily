@@ -6,6 +6,7 @@ import com.studily.util.DBConnection;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Quiz attempt persistence. Every statement is a PreparedStatement.
@@ -103,6 +104,43 @@ public class QuizDAO {
             cursor = cursor.minusDays(1);
     }
         return streak;
+    }
+
+    /** Daily quiz-attempt counts for the heatmap (last N days). */
+    public Map<String, Integer> attemptActivity(int userId, int days) throws SQLException {
+        String sql = "SELECT CAST(attempt_date AS date) d, COUNT(*) c FROM quiz_results "
+                   + "WHERE user_id = ? AND attempt_date >= NOW() - CAST(? AS INT) * INTERVAL '1 day' "
+                   + "GROUP BY 1";
+        Map<String, Integer> out = new java.util.LinkedHashMap<>();
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ps.setInt(2, days);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Date d = rs.getDate(1);
+                    if (d != null) out.put(d.toLocalDate().toString(), rs.getInt(2));
+                }
+            }
+        }
+        return out;
+    }
+
+    /** Chronological quiz attempts with percentage for trend charts. */
+    public List<QuizResult> findTrendByUser(int userId, int limit) throws SQLException {
+        String sql = "SELECT qr.id, qr.user_id, qr.note_id, qr.score, qr.total_questions, qr.attempt_date, n.title "
+                   + "FROM quiz_results qr JOIN notes n ON qr.note_id = n.note_id "
+                   + "WHERE qr.user_id = ? ORDER BY qr.attempt_date ASC LIMIT ?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ps.setInt(2, limit);
+            try (ResultSet rs = ps.executeQuery()) {
+                List<QuizResult> results = new ArrayList<>();
+                while (rs.next()) results.add(mapRow(rs));
+                return results;
+            }
+        }
     }
 
     private QuizResult mapRow(ResultSet rs) throws SQLException {
