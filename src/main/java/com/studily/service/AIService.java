@@ -9,6 +9,7 @@ import com.studily.util.AppConfig;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -192,5 +193,138 @@ public final class AIService {
         public AIServiceException(String message) {
             super(message);
         }
+    }
+
+    // ==================== v2.0 capabilities ====================
+
+    /**
+     * NotebookLM-style chat: answer strictly from the provided notes.
+     * history alternates user/assistant turns (already oldest-first).
+     */
+    public static String chat(int userId, String noteTitle, String noteText,
+                              List<String[]> history, String question) throws AIServiceException {
+        String system = """
+                You are Studily, an AI study tutor answering questions about a student's uploaded notes.
+                Note title: "%s"
+                RULES:
+                - Answer ONLY from the NOTES below. If the answer is not in the notes, say so briefly and
+                  offer the closest related concept that IS in the notes.
+                - Be concise and clear; use short paragraphs or bullet points.
+                - Plain text only: no markdown syntax, no asterisks, no heading marks.
+                NOTES:
+                %s
+                """.formatted(noteTitle, clip(noteText, 9000));
+
+        StringBuilder convo = new StringBuilder();
+        for (String[] turn : history) {
+            convo.append(turn[0].equals("user") ? "Student: " : "Tutor: ")
+                 .append(clip(turn[1], 700)).append("\n");
+        }
+        convo.append("Student: ").append(clip(question, 1200));
+
+        return complete(system, convo.toString());
+    }
+
+    /**
+     * Generates a hierarchical mind map of the note.
+     * Returns raw JSON: { "label": "...", "children": [ { "label": "...", "children": [] } ] }
+     */
+    public static String generateMindMap(String noteText) throws AIServiceException {
+        String system = """
+                You convert study notes into a hierarchical mind map. Respond with ONLY a JSON object:
+                { "label": "central topic", "children": [ { "label": "branch", "children": [ { "label": "sub", "children": [] } ] } ] }
+                Rules: 3-6 top-level branches, at most 2 levels deep, labels max 4 words, plain text,
+                content grounded ONLY in the provided notes.
+                NOTES:
+                %s
+                """.formatted(clip(noteText, 9000));
+        return complete(system, "Generate the mind map JSON now.");
+    }
+
+    /**
+     * Weak-topic detection: analyze wrong quiz answers, output JSON array of
+     * { "topic": "...", "reason": "...", "noteId": 123 } entries (max 4).
+     */
+    public static String detectWeakTopics(String wrongAnswerDigest) throws AIServiceException {
+        String system = """
+                You analyze a student's wrong quiz answers to find weak topics. Respond with ONLY a JSON array:
+                [ { "topic": "topic name", "reason": "one short sentence on what to review", "noteId": <the related note id as number> } ]
+                Rules: max 4 items, most important first, topic = the specific concept (not the note title),
+                if the list is empty return [].
+                WRONG ANSWERS (question | chosen | correct | noteId):
+                %s
+                """.formatted(clip(wrongAnswerDigest, 6000));
+        return complete(system, "Analyze now.");
+    }
+
+    /**
+     * Personalized wrong-answer explanation: why THIS student fell for the
+     * trap they chose, not just what the right answer is.
+     */
+    public static String explainMistake(String noteTitle, String noteText, String question,
+                                        String chosenLetter, String chosenText, String correctLetter,
+                                        String correctText, String aiExplanation) throws AIServiceException {
+        String system = """
+                You are a study coach. The student answered a quiz question wrong. Explain the mistake
+                personally and briefly (2-4 sentences): why the option they picked is tempting, what
+                misconception it reveals, and the key fact that gives the right answer.
+                Address the student as "you". Plain text, no markdown.
+                Question: %s
+                Student chose: %s) %s
+                Correct answer: %s) %s
+                Reference explanation: %s
+                NOTES (%s):
+                %s
+                """.formatted(clip(question, 400), chosenLetter, clip(chosenText, 200),
+                              correctLetter, clip(correctText, 200), clip(aiExplanation, 300),
+                              noteTitle, clip(noteText, 4000));
+        return complete(system, "Explain this student's mistake now.");
+    }
+
+    /** Single-turn completion helper shared by the v2 features. */
+    private static String complete(String systemPrompt, String userPrompt) throws AIServiceException {
+        try {
+            JsonObject body = new JsonObject();
+            body.addProperty("model", MODEL);
+            com.google.gson.JsonArray messages = new com.google.gson.JsonArray();
+            JsonObject system = new JsonObject();
+            system.addProperty("role", "system");
+            system.addProperty("content", systemPrompt);
+            JsonObject user = new JsonObject();
+            user.addProperty("role", "user");
+            user.addProperty("content", userPrompt);
+            messages.add(system);
+            messages.add(user);
+            body.add("messages", messages);
+            body.addProperty("temperature", 0.4);
+            body.addProperty("max_tokens", 2048);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(API_URL))
+                    .timeout(Duration.ofSeconds(TIMEOUT_SECONDS))
+                    .header("Authorization", "Bearer " + API_KEY)
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
+                    .build();
+            HttpResponse<String> response = HTTP.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 401) throw new IllegalStateException("Invalid Groq API key.");
+            if (response.statusCode() == 429) throw new IllegalStateException("AI rate limit reached. Please wait a moment and retry.");
+            if (response.statusCode() >= 400) throw new IllegalStateException("Groq API error " + response.statusCode() + ".");
+
+            return JsonParser.parseString(response.body()).getAsJsonObject()
+                    .getAsJsonArray("choices").get(0).getAsJsonObject()
+                    .getAsJsonObject("message").get("content").getAsString();
+        } catch (IOException | InterruptedException e) {
+            if (e instanceof InterruptedException) Thread.currentThread().interrupt();
+            throw new AIServiceException("The AI service is unreachable right now. Please try again.");
+        } catch (IllegalStateException e) {
+            throw new AIServiceException(e.getMessage());
+        }
+    }
+
+    private static String clip(String text, int max) {
+        if (text == null) return "";
+        return text.length() <= max ? text : text.substring(0, max) + "…";
     }
 }
