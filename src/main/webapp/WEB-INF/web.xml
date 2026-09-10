@@ -35,6 +35,12 @@
         <url-pattern>/history</url-pattern>
         <url-pattern>/generate-notes</url-pattern>
         <url-pattern>/quiz-submit</url-pattern>
+        <url-pattern>/chat</url-pattern>
+        <url-pattern>/review</url-pattern>
+        <url-pattern>/analytics</url-pattern>
+        <url-pattern>/search</url-pattern>
+        <url-pattern>/mindmap</url-pattern>
+        <url-pattern>/explain</url-pattern>
     </filter-mapping>
 
     <session-config>

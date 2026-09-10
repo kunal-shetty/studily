@@ -1,5 +1,6 @@
 package com.studily.controller;
 
+import com.studily.dao.ReviewDAO;
 import com.studily.model.DashboardStats;
 import com.studily.model.User;
 import com.studily.service.DashboardService;
@@ -20,6 +21,7 @@ import java.sql.SQLException;
 public class DashboardServlet extends BaseAppServlet {
 
     private final DashboardService dashboardService = new DashboardService();
+    private final ReviewDAO reviewDAO = new ReviewDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -28,6 +30,7 @@ public class DashboardServlet extends BaseAppServlet {
         try {
             DashboardStats stats = dashboardService.buildStats(user.getUserId());
             request.setAttribute("stats", stats);
+            request.setAttribute("dueCount", reviewDAO.countDue(user.getUserId()));
             render(request, response, "dashboard.jsp");
         } catch (SQLException e) {
             Log.severe("Dashboard load failed for user " + user.getUserId() + ": " + e.getMessage(), e);

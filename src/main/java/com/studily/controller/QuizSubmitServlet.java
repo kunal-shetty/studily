@@ -2,7 +2,9 @@ package com.studily.controller;
 
 import com.studily.dao.MCQDAO;
 import com.studily.dao.NotesDAO;
+import com.studily.dao.QuizAnswerDAO;
 import com.studily.dao.QuizDAO;
+import com.studily.model.QuizAnswer;
 import com.studily.model.MCQ;
 import com.studily.model.Note;
 import com.studily.model.User;
@@ -17,6 +19,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +33,7 @@ public class QuizSubmitServlet extends BaseAppServlet {
     private final NotesDAO notesDAO = new NotesDAO();
     private final MCQDAO mcqDAO = new MCQDAO();
     private final QuizDAO quizDAO = new QuizDAO();
+    private final QuizAnswerDAO quizAnswerDAO = new QuizAnswerDAO();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -87,9 +91,21 @@ public class QuizSubmitServlet extends BaseAppServlet {
             if (m.isCorrect(chosen.get(m.getId()))) score++;
         }
 
-        // --- Persist attempt ---
+        // --- Persist attempt + per-question answers ---
         try {
-            quizDAO.insert(user.getUserId(), noteId, score, mcqs.size());
+            int resultId = quizDAO.insert(user.getUserId(), noteId, score, mcqs.size());
+            List<QuizAnswer> answers = new ArrayList<>();
+            for (MCQ m : mcqs) {
+                QuizAnswer a = new QuizAnswer();
+                a.setResultId(resultId);
+                a.setMcqId(m.getId());
+                a.setUserId(user.getUserId());
+                a.setChosenAnswer(chosen.get(m.getId()));
+                a.setCorrect(m.isCorrect(chosen.get(m.getId())));
+                a.setNoteQuestion(m.getQuestion());
+                answers.add(a);
+            }
+            quizAnswerDAO.insertBatch(resultId, user.getUserId(), answers);
         } catch (SQLException e) {
             Log.severe("Quiz result save failed (user " + user.getUserId() + "): " + e.getMessage(), e);
             Flash.error(request, "Could not save your quiz result.");
