@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         version="6.0">
+
+    <display-name>Studily — AI Study Assistant</display-name>
+
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+    <!-- Flash messages live in the session; rendered + cleared on every request. -->
+    <filter>
+        <filter-name>FlashFilter</filter-name>
+        <filter-class>com.studily.filter.FlashFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>FlashFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- Route protection. Servlets themselves are mapped via @WebServlet. -->
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>com.studily.filter.AuthFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/dashboard</url-pattern>
+        <url-pattern>/upload</url-pattern>
+        <url-pattern>/summary</url-pattern>
+        <url-pattern>/flashcards</url-pattern>
+        <url-pattern>/quiz</url-pattern>
+        <url-pattern>/history</url-pattern>
+        <url-pattern>/generate-notes</url-pattern>
+        <url-pattern>/quiz-submit</url-pattern>
+    </filter-mapping>
+
+    <session-config>
+        <session-timeout>60</session-timeout>
+        <cookie-config>
+            <http-only>true</http-only>
+        </cookie-config>
+        <tracking-mode>COOKIE</tracking-mode>
+    </session-config>
+
+</web-app>
