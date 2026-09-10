@@ -1,0 +1,41 @@
+# ---------- Build output ----------
+target/
+build/
+out/
+*.class
+*.war
+*.jar
+!.mvn/wrapper/maven-wrapper.jar
+
+# ---------- IDEs ----------
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.project
+.classpath
+.factorypath
+nbproject/private/
+
+# ---------- OS junk ----------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---------- Logs ----------
+*.log
+logs/
+
+# ---------- Secrets & local config ----------
+# Contains DB password / API keys — never commit.
+# Copy application.properties.example to application.properties and fill in real values.
+src/main/resources/application.properties
+
+# ---------- Runtime artifacts ----------
+# Uploaded PDFs / extracted working dir
+studily-uploads/
+
+# ---------- Node (if tooling ever added) ----------
+node_modules/
