@@ -8,6 +8,7 @@
 <%@ include file="partials/flash.jsp" %>
 <%
     DashboardStats stats = (DashboardStats) request.getAttribute("stats");
+    Integer dueCount = (Integer) request.getAttribute("dueCount");
     DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMM d, yyyy");
     DateTimeFormatter fmtTime = DateTimeFormatter.ofPattern("MMM d, HH:mm");
 %>
@@ -40,7 +41,38 @@
         </div>
     </div>
 
-    <div class="grid-2">
+    <div class="card rise rise-2">
+        <div class="card-title">
+            <span class="icon">📖</span>
+            <h3>Continue Studying</h3>
+        </div>
+        <%
+            List<Note> contNotes = stats.getRecentNotes();
+            if (contNotes != null && !contNotes.isEmpty()) {
+                for (Note cn : contNotes) {
+                    boolean hasKit = cn.getSummaryJson() != null && !cn.getSummaryJson().isBlank();
+        %>
+        <div class="list-row">
+            <div class="list-main">
+                <div class="list-title"><%= cn.getTitle() %></div>
+                <div class="list-sub"><%= hasKit ? "Study kit ready" : "AI material pending" %></div>
+            </div>
+            <div class="list-actions">
+                <% if (hasKit) { %>
+                <a class="btn btn-secondary btn-sm" href="<%= ctx %>/flashcards?noteId=<%= cn.getNoteId() %>">🃏 Cards</a>
+                <a class="btn btn-secondary btn-sm" href="<%= ctx %>/quiz?noteId=<%= cn.getNoteId() %>">❓ Quiz</a>
+                <a class="btn btn-ghost btn-sm" href="<%= ctx %>/chat?noteId=<%= cn.getNoteId() %>">💬 Chat</a>
+                <% } else { %>
+                <a class="btn btn-primary btn-sm" href="<%= ctx %>/generate-notes?noteId=<%= cn.getNoteId() %>">✨ Generate</a>
+                <% } %>
+            </div>
+        </div>
+        <%      }
+            }
+        %>
+    </div>
+
+    <div class="grid-2 mt-3">
         <div class="card rise rise-2">
             <div class="card-title">
                 <span class="icon">📄</span>
@@ -110,7 +142,9 @@
         </div>
         <div style="display:flex; gap:12px; flex-wrap:wrap">
             <a class="btn btn-primary" href="<%= ctx %>/upload">📎 Upload New Notes</a>
-            <a class="btn btn-secondary" href="<%= ctx %>/history">🕘 Study History</a>
+            <a class="btn btn-secondary" href="<%= ctx %>/review">🧠 Review <span class="side-badge"><%= dueCount == null ? "" : dueCount %></span></a>
+            <a class="btn btn-secondary" href="<%= ctx %>/analytics">📊 Analytics</a>
+            <a class="btn btn-secondary" href="<%= ctx %>/history">🕘 History</a>
         </div>
     </div>
 </div>

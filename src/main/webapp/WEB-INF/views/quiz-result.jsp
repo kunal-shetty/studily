@@ -78,6 +78,14 @@
             <strong>AI Explanation:</strong> <%= m.getExplanation() == null || m.getExplanation().isBlank()
                     ? "The correct answer is " + m.getCorrectAnswer() + "." : m.getExplanation() %>
         </div>
+        <% if (!wasCorrect) { %>
+        <form method="post" action="<%= ctx %>/explain" class="mt-2">
+            <input type="hidden" name="noteId" value="<%= note.getNoteId() %>">
+            <input type="hidden" name="mcqId" value="<%= m.getId() %>">
+            <input type="hidden" name="chosen" value="<%= pick == null ? "" : pick %>">
+            <button type="submit" class="btn btn-secondary btn-sm">🧭 Explain my mistake</button>
+        </form>
+        <% } %>
     </div>
     <% } %>
 </div>

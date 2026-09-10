@@ -41,6 +41,7 @@
             </div>
             <div class="list-actions">
                 <a class="btn btn-secondary btn-sm" href="<%= ctx %>/summary?noteId=<%= n.getNoteId() %>">Summary</a>
+                <a class="btn btn-ghost btn-sm" href="<%= ctx %>/chat?noteId=<%= n.getNoteId() %>">Chat</a>
                 <a class="btn btn-ghost btn-sm" href="<%= ctx %>/flashcards?noteId=<%= n.getNoteId() %>">Cards</a>
                 <a class="btn btn-ghost btn-sm" href="<%= ctx %>/quiz?noteId=<%= n.getNoteId() %>">Quiz</a>
             </div>

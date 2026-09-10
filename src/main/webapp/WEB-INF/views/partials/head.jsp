@@ -11,6 +11,8 @@
                 + navUser.getName().trim().split("\\s+")[navUser.getName().trim().split("\\s+").length - 1]
                     .substring(0, 1).toUpperCase();
     }
+    Object dueCountAttr = request.getAttribute("dueCount");
+    String dueCount = dueCountAttr == null ? "" : String.valueOf(dueCountAttr);
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,24 +26,27 @@
     <link rel="stylesheet" href="<%= ctx %>/assets/css/studily.css">
 </head>
 <body>
-<nav class="navbar">
-    <a class="brand" href="<%= ctx %>/<%= navUser != null ? "dashboard" : "index.jsp" %>">
-        <span class="logo-dot">S</span> Studily
-    </a>
-    <% if (navUser != null) { %>
-    <div class="nav-links">
-        <a href="<%= ctx %>/dashboard" class="<%= "dashboard".equals(navActive) ? "active" : "" %>">Dashboard</a>
-        <a href="<%= ctx %>/upload" class="<%= "upload".equals(navActive) ? "active" : "" %>">Upload</a>
-        <a href="<%= ctx %>/history" class="<%= "history".equals(navActive) ? "active" : "" %>">History</a>
-    </div>
-    <% } %>
-    <div class="nav-user">
-        <% if (navUser != null) { %>
-        <span class="avatar" title="<%= navUser.getEmail() %>"><%= initials %></span>
-        <a class="btn btn-ghost btn-sm" href="<%= ctx %>/logout">Logout</a>
-        <% } else { %>
-        <a class="btn btn-ghost btn-sm" href="<%= ctx %>/login">Login</a>
-        <a class="btn btn-primary btn-sm" href="<%= ctx %>/register">Get Started</a>
-        <% } %>
-    </div>
-</nav>
+<div class="app-shell" id="app-shell">
+    <aside class="sidebar" id="sidebar">
+        <a class="brand" href="<%= ctx %>/dashboard"><span class="logo-dot">S</span> Studily</a>
+        <nav class="side-nav">
+            <span class="side-label">Study</span>
+            <a href="<%= ctx %>/dashboard" class="<%= "dashboard".equals(navActive) ? "active" : "" %>"><span class="ico">🏠</span> Dashboard</a>
+            <a href="<%= ctx %>/upload" class="<%= "upload".equals(navActive) ? "active" : "" %>"><span class="ico">📄</span> Upload Notes</a>
+            <a href="<%= ctx %>/history" class="<%= "history".equals(navActive) ? "active" : "" %>"><span class="ico">🗂</span> My Notes</a>
+            <span class="side-label">Practice</span>
+            <a href="<%= ctx %>/review" class="<%= "flashcards".equals(navActive) ? "active" : "" %>"><span class="ico">🧠</span> Review <span class="side-badge"><%= dueCount.isEmpty() ? "•" : dueCount %></span></a>
+            <a href="<%= ctx %>/analytics" class="<%= "analytics".equals(navActive) ? "active" : "" %>"><span class="ico">📊</span> Analytics</a>
+        </nav>
+        <div class="side-bottom">
+            <div class="side-user">
+                <span class="avatar"><%= initials %></span>
+                <span class="side-user-name"><%= navUser != null ? navUser.getName() : "" %></span>
+            </div>
+            <a class="btn btn-ghost btn-sm btn-block" href="<%= ctx %>/logout">Logout</a>
+        </div>
+    </aside>
+    <div class="sidebar-scrim" id="sidebar-scrim"></div>
+    <main class="app-main">
+        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle menu">☰</button>
+        <button class="search-trigger" id="search-trigger" title="Search (Ctrl+K)">🔍 Search… <kbd>Ctrl K</kbd></button>
