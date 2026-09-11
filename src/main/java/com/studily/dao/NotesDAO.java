@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,8 +47,8 @@ public class NotesDAO {
 
     /** Fetch a note only if it belongs to the given user. */
     public Note findByIdAndUser(int noteId, int userId) throws SQLException {
-        String sql = "SELECT note_id, user_id, title, pdf_path, extracted_text, summary, mindmap_json, created_at "
-                   + "FROM notes WHERE note_id = ? AND user_id = ? LIMIT 1";
+        String sql = "SELECT n.note_id, n.user_id, n.title, n.pdf_path, n.extracted_text, n.summary, n.mindmap_json, "
+                   + "n.created_at, n.bookmarked FROM notes n WHERE n.note_id = ? AND n.user_id = ? LIMIT 1";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, noteId);
@@ -59,8 +60,8 @@ public class NotesDAO {
     }
 
     public List<Note> findRecentByUser(int userId, int limit) throws SQLException {
-        String sql = "SELECT note_id, user_id, title, pdf_path, extracted_text, summary, mindmap_json, created_at "
-                   + "FROM notes WHERE user_id = ? ORDER BY created_at DESC LIMIT ?";
+        String sql = "SELECT note_id, user_id, title, pdf_path, extracted_text, summary, mindmap_json, created_at, bookmarked "
+                   + "FROM notes WHERE user_id = ? ORDER BY bookmarked DESC, created_at DESC LIMIT ?";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, userId);
@@ -98,6 +99,31 @@ public class NotesDAO {
         }
     }
 
+    /** Toggle bookmark flag on a note. */
+    public void setBookmarked(int noteId, int userId, boolean bookmarked) throws SQLException {
+        String sql = "UPDATE notes SET bookmarked = ? WHERE note_id = ? AND user_id = ?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setBoolean(1, bookmarked);
+            ps.setInt(2, noteId);
+            ps.setInt(3, userId);
+            ps.executeUpdate();
+        }
+    }
+
+    /** Assign a note to a subject folder (nullable). */
+    public void setSubject(int noteId, int userId, Integer subjectId) throws SQLException {
+        String sql = "UPDATE notes SET subject_id = ? WHERE note_id = ? AND user_id = ?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            if (subjectId == null) ps.setNull(1, Types.INTEGER);
+            else ps.setInt(1, subjectId);
+            ps.setInt(2, noteId);
+            ps.setInt(3, userId);
+            ps.executeUpdate();
+        }
+    }
+
     /** Store the generated mind map JSON. */
     public void updateMindmap(int noteId, String mindmapJson) throws SQLException {
         String sql = "UPDATE notes SET mindmap_json = ? WHERE note_id = ?";
@@ -118,6 +144,7 @@ public class NotesDAO {
         n.setExtractedText(rs.getString("extracted_text"));
         n.setSummaryJson(rs.getString("summary"));
         n.setMindmapJson(rs.getString("mindmap_json"));
+        n.setBookmarked(rs.getBoolean("bookmarked"));
         Timestamp ts = rs.getTimestamp("created_at");
         n.setCreatedAt(ts == null ? null : ts.toLocalDateTime());
         return n;

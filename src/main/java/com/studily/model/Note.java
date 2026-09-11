@@ -15,6 +15,8 @@ public class Note {
     private String extractedText;
     private String summaryJson;
     private String mindmapJson;
+    private boolean bookmarked;
+    private Integer subjectId;
     private LocalDateTime createdAt;
 
     public Note() {
@@ -40,6 +42,12 @@ public class Note {
 
     public String getMindmapJson() { return mindmapJson; }
     public void setMindmapJson(String mindmapJson) { this.mindmapJson = mindmapJson; }
+
+    public boolean isBookmarked() { return bookmarked; }
+    public void setBookmarked(boolean bookmarked) { this.bookmarked = bookmarked; }
+
+    public Integer getSubjectId() { return subjectId; }
+    public void setSubjectId(Integer subjectId) { this.subjectId = subjectId; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
