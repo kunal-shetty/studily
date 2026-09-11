@@ -14,6 +14,20 @@ Built with Java EE (JSP + Servlets), PostgreSQL (Supabase), JDBC, Apache Tomcat,
 | **Quiz** | Difficulty filter, countdown timer with auto-submit, instant feedback, AI explanations, saved attempts |
 | **Dashboard** | Live MySQL-backed stats: notes, flashcards, average score, study streak, recent activity |
 | **History** | Every note and quiz attempt, one page |
+| **AI Chat** ⭐ | NotebookLM-style chat per note — answers strictly from your material, full history saved |
+| **Spaced Repetition** ⭐ | Quizlet-style Again/Hard/Good/Easy ratings with SM-2 scheduling and due badges |
+| **Analytics** | GitHub-style study heatmap, Chart.js accuracy trend, AI weak-topic detection |
+| **Mind Maps** | AI-generated concept hierarchies, cached per note |
+| **Explain My Mistake** | AI coach explains why *you* fell for the wrong answer you picked |
+| **Global Search** | Raycast-style Ctrl+K modal across notes, flashcards, and MCQs |
+| **AI Study Session** ⭐ | One click → 20-minute guided plan: summary → flashcards → timed quiz, XP awarded |
+| **Gamification** | Weekly XP leaderboard, unlockable badges, study-streak tracking |
+| **Profile** | GitHub-style profile: stats, badges, weekly rank |
+| **Calendar** | Month activity calendar with per-day drill-down |
+| **Settings** | Dark/light theme, accent colors, AI model choice, notifications |
+| **Organization** | Subject folders, note bookmarks, flashcard editing |
+| **Sharing** | Secret view-only share links for any note |
+| **Upload Queue** | Select multiple PDFs at once — each becomes its own note |
 
 ## 🏗 Architecture (MVC)
 
@@ -89,4 +103,11 @@ Open http://localhost:8080/studily/
 
 ## 🗺 Roadmap
 
-DOCX support · AI chat with notes · OCR for scanned PDFs · voice revision · study groups · mobile app
+~~AI chat with notes~~ ✅ · ~~spaced repetition~~ ✅ · ~~analytics + weak topics~~ ✅ · ~~global search~~ ✅ ·
+~~leaderboards~~ ✅ · ~~theme customization~~ ✅ · DOCX support · OCR for scanned PDFs · voice revision · study groups · mobile app
+
+## 🧬 v2.1 Database Migration
+
+If you deployed v1/v2.0 before, run `database/v2_1_migration_postgres.sql` in Supabase's SQL Editor —
+it adds user settings, bookmarks, subject folders, share links, XP events, and badges.
+Safe to re-run.

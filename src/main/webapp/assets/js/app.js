@@ -62,6 +62,9 @@ window.studilyCtx = window.studilyCtx || '';
         card.classList.remove('flipped');
         flipped = false;
         if (knownCount) knownCount.textContent = known.size + ' marked';
+        // Expose deck state for the card editor (and other consumers).
+        window.studilyDeckOrder = order;
+        window.studilyDeckPos = idx;
     }
 
     function flip() {
@@ -170,20 +173,93 @@ window.studilyCtx = window.studilyCtx || '';
     input.addEventListener('change', updateLabel);
 
     function updateLabel() {
-        if (input.files.length) {
+        if (input.files.length > 1) {
+            label.textContent = input.files.length + ' PDFs queued';
+            label.style.color = 'var(--primary)';
+        } else if (input.files.length) {
             label.textContent = input.files[0].name;
             label.style.color = 'var(--primary)';
         } else {
-            label.textContent = 'or click to browse — PDF up to 10 MB';
+            label.textContent = 'or click to browse — multiple PDFs welcome, up to 10 MB each';
             label.style.color = '';
         }
     }
 })();
 
-/* ---------------- Confirm delete ---------------- */
-function confirmAction(message) {
-    return window.confirm(message);
-}
+/* ---------------- Universal confirm modal (data-confirm forms) ---------------- */
+(function () {
+    var modal = document.getElementById('confirm-modal');
+    if (!modal) return;
+    var titleEl = document.getElementById('confirm-title');
+    var textEl = document.getElementById('confirm-text');
+    var okBtn = document.getElementById('confirm-ok');
+    var cancelBtn = document.getElementById('confirm-cancel');
+    var pendingForm = null;
+
+    function open(message, form) {
+        pendingForm = form;
+        titleEl.textContent = 'Are you sure?';
+        textEl.textContent = message;
+        modal.hidden = false;
+    }
+    function close() { modal.hidden = true; pendingForm = null; }
+
+    okBtn.addEventListener('click', function () {
+        if (pendingForm) pendingForm.submit();
+        close();
+    });
+    cancelBtn.addEventListener('click', close);
+    modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) close(); });
+
+    document.querySelectorAll('form[data-confirm]').forEach(function (form) {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            open(form.getAttribute('data-confirm'), form);
+        });
+    });
+})();
+
+/* ---------------- v2.1: theme + accent from Settings ---------------- */
+(function () {
+    try {
+        var prefs = JSON.parse(localStorage.getItem('studily-prefs') || '{}');
+        if (prefs.theme === 'light') document.body.classList.add('theme-light');
+        if (prefs.accent && prefs.accent !== 'blue') document.body.classList.add('accent-' + prefs.accent);
+    } catch (e) { /* first visit or blocked storage */ }
+})();
+
+/* ---------------- v2.1: flashcard editor ---------------- */
+(function () {
+    var editBtn = document.getElementById('btn-edit');
+    var editor = document.getElementById('card-editor');
+    if (!editBtn || !editor) return;
+    var idField = document.getElementById('edit-card-id');
+    var qField = document.getElementById('edit-question');
+    var aField = document.getElementById('edit-answer');
+    var cancel = document.getElementById('edit-cancel');
+
+    function currentCard() {
+        try {
+            var data = JSON.parse(document.getElementById('flashcard-data').textContent);
+            var order = window.studilyDeckOrder || data.map(function (_, i) { return i; });
+            var idx = window.studilyDeckPos || 0;
+            return data[order[idx]] || data[idx];
+        } catch (e) { return null; }
+    }
+
+    editBtn.addEventListener('click', function () {
+        var card = currentCard();
+        if (!card) return;
+        idField.value = card.id;
+        qField.value = card.question;
+        aField.value = card.answer;
+        editor.style.display = 'block';
+        editor.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        qField.focus();
+    });
+    cancel.addEventListener('click', function () { editor.style.display = 'none'; });
+})();
 
 /* ============================================================
    v2.0 — Sidebar, search, modals, heatmap, mind map

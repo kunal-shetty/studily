@@ -41,6 +41,13 @@
         <url-pattern>/search</url-pattern>
         <url-pattern>/mindmap</url-pattern>
         <url-pattern>/explain</url-pattern>
+        <url-pattern>/settings</url-pattern>
+        <url-pattern>/profile</url-pattern>
+        <url-pattern>/calendar</url-pattern>
+        <url-pattern>/leaderboard</url-pattern>
+        <url-pattern>/session</url-pattern>
+        <url-pattern>/subjects</url-pattern>
+        <url-pattern>/note-edit</url-pattern>
     </filter-mapping>
 
     <session-config>
