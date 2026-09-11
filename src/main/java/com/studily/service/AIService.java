@@ -281,6 +281,22 @@ public final class AIService {
         return complete(system, "Explain this student's mistake now.");
     }
 
+    /**
+     * AI Study Session: builds a personalized plan for one note.
+     * Returns raw JSON: { "intro": "...", "focus": ["..."], "tip": "..." }
+     */
+    public static String buildSessionPlan(String noteTitle, String noteText) throws AIServiceException {
+        String system = """
+                You are Studily's study coach. The student is about to start a 20-minute study session on one note.
+                Respond with ONLY a JSON object:
+                { "intro": "2 sentence warm-up tying the session to the exam prep", "focus": ["area to focus on", "..."], "tip": "one actionable memory tip for this material" }
+                Rules: 3-5 focus areas, plain text, grounded ONLY in the notes.
+                NOTES:
+                %s
+                """.formatted(clip(noteText, 8000));
+        return complete(system, "Build the 20-minute study plan now.");
+    }
+
     /** Single-turn completion helper shared by the v2 features. */
     private static String complete(String systemPrompt, String userPrompt) throws AIServiceException {
         try {

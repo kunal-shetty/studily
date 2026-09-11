@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.studily.dao.FlashcardDAO;
 import com.studily.dao.MCQDAO;
 import com.studily.dao.NotesDAO;
+import com.studily.dao.ShareDAO;
 import com.studily.model.Note;
 import com.studily.model.StudyKit;
 import com.studily.model.User;
@@ -27,6 +28,7 @@ public class SummaryServlet extends BaseAppServlet {
     private final NotesDAO notesDAO = new NotesDAO();
     private final FlashcardDAO flashcardDAO = new FlashcardDAO();
     private final MCQDAO mcqDAO = new MCQDAO();
+    private final ShareDAO shareDAO = new ShareDAO();
     private final Gson gson = new Gson();
 
     @Override
@@ -77,11 +79,19 @@ public class SummaryServlet extends BaseAppServlet {
             needsGeneration = true;
         }
 
+        java.util.Map<Integer, String> subjects;
+        try {
+            subjects = shareDAO.subjectsFor(user.getUserId());
+        } catch (SQLException e) {
+            subjects = java.util.Map.of();
+        }
+
         request.setAttribute("note", note);
         request.setAttribute("bundle", bundle);
         request.setAttribute("flashcardCount", flashcardCount);
         request.setAttribute("mcqCount", mcqCount);
         request.setAttribute("needsGeneration", needsGeneration);
+        request.setAttribute("subjects", subjects);
         render(request, response, "summary.jsp");
     }
 }

@@ -1,5 +1,6 @@
 package com.studily.controller;
 
+import com.studily.dao.EngagementDAO;
 import com.studily.dao.MCQDAO;
 import com.studily.dao.NotesDAO;
 import com.studily.dao.QuizAnswerDAO;
@@ -34,6 +35,7 @@ public class QuizSubmitServlet extends BaseAppServlet {
     private final MCQDAO mcqDAO = new MCQDAO();
     private final QuizDAO quizDAO = new QuizDAO();
     private final QuizAnswerDAO quizAnswerDAO = new QuizAnswerDAO();
+    private final EngagementDAO engagementDAO = new EngagementDAO();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -110,6 +112,29 @@ public class QuizSubmitServlet extends BaseAppServlet {
             Log.severe("Quiz result save failed (user " + user.getUserId() + "): " + e.getMessage(), e);
             Flash.error(request, "Could not save your quiz result.");
         }
+
+        // --- Gamification: XP + badges (never blocks the result page) ---
+        try {
+            int xp = 10 + score * 4;
+            if (Boolean.TRUE.equals(session.getAttribute("studySession"))) xp += 20;
+            engagementDAO.awardXp(user.getUserId(), xp, "quiz");
+            double pct = mcqs.isEmpty() ? 0 : (score * 100.0 / mcqs.size());
+            int notes = notesDAO.countByUser(user.getUserId());
+            int cards = new com.studily.dao.FlashcardDAO().countByUser(user.getUserId());
+            double accuracy = quizAnswerDAO.accuracyByUser(user.getUserId());
+            int streak = 0;
+            try {
+                streak = new com.studily.service.DashboardService().buildStats(user.getUserId()).getStudyStreak();
+            } catch (Exception ignored) {
+            }
+            var fresh = engagementDAO.syncBadges(user.getUserId(), notes, cards, accuracy, streak, true);
+            if (!fresh.isEmpty()) {
+                Flash.success(request, "🏅 New badge unlocked!");
+            }
+        } catch (Exception e) {
+            Log.severe("XP/badge award failed (user " + user.getUserId() + "): " + e.getMessage(), e);
+        }
+        session.removeAttribute("studySession");
 
         // --- Clear quiz session state ---
         session.removeAttribute("quiz.noteId");

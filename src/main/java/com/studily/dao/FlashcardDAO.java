@@ -56,6 +56,21 @@ public class FlashcardDAO {
         }
     }
 
+    /** Edit a card's question/answer — ownership-scoped through the note. */
+    public boolean updateCard(int userId, int cardId, String question, String answer) throws SQLException {
+        String sql = "UPDATE flashcards SET question = ?, answer = ? "
+                   + "FROM notes WHERE flashcards.note_id = notes.note_id "
+                   + "AND flashcards.id = ? AND notes.user_id = ?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, question);
+            ps.setString(2, answer);
+            ps.setInt(3, cardId);
+            ps.setInt(4, userId);
+            return ps.executeUpdate() == 1;
+        }
+    }
+
     public int countByNote(int noteId) throws SQLException {
         String sql = "SELECT COUNT(*) FROM flashcards WHERE note_id = ?";
         try (Connection con = DBConnection.getConnection();

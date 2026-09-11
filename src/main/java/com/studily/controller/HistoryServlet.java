@@ -2,6 +2,7 @@ package com.studily.controller;
 
 import com.studily.dao.NotesDAO;
 import com.studily.dao.QuizDAO;
+import com.studily.dao.ShareDAO;
 import com.studily.model.Note;
 import com.studily.model.QuizResult;
 import com.studily.model.User;
@@ -24,6 +25,7 @@ public class HistoryServlet extends BaseAppServlet {
 
     private final NotesDAO notesDAO = new NotesDAO();
     private final QuizDAO quizDAO = new QuizDAO();
+    private final ShareDAO shareDAO = new ShareDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -34,6 +36,7 @@ public class HistoryServlet extends BaseAppServlet {
             List<QuizResult> attempts = quizDAO.findRecentByUser(user.getUserId(), 200);
             request.setAttribute("notes", notes);
             request.setAttribute("attempts", attempts);
+            request.setAttribute("subjects", shareDAO.subjectsFor(user.getUserId()));
         } catch (SQLException e) {
             Log.severe("History load failed for user " + user.getUserId() + ": " + e.getMessage(), e);
             Flash.error(request, "Could not load your history.");
@@ -41,6 +44,7 @@ public class HistoryServlet extends BaseAppServlet {
             List<QuizResult> attempts = List.of();
             request.setAttribute("notes", notes);
             request.setAttribute("attempts", attempts);
+            request.setAttribute("subjects", java.util.Map.of());
         }
         render(request, response, "history.jsp");
     }
