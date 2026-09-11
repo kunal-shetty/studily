@@ -47,7 +47,29 @@
     <div class="flashcard-nav rise rise-3" style="margin-top:12px">
         <button class="btn btn-ghost btn-sm" id="btn-shuffle">🔀 Shuffle</button>
         <button class="btn btn-secondary btn-sm" id="btn-known">✓ Mark Known</button>
+        <button class="btn btn-ghost btn-sm" id="btn-edit">✏️ Edit Card</button>
         <span class="badge" id="known-count">0 marked</span>
+    </div>
+
+    <div class="card mt-3 rise rise-3" id="card-editor" style="display:none">
+        <div class="card-title"><span class="icon">✏️</span><h3>Edit this card</h3></div>
+        <form method="post" action="<%= ctx %>/note-edit">
+            <input type="hidden" name="action" value="edit-card">
+            <input type="hidden" name="noteId" value="<%= note.getNoteId() %>">
+            <input type="hidden" name="cardId" id="edit-card-id">
+            <div class="form-group">
+                <label for="edit-question">Question</label>
+                <textarea class="textarea" id="edit-question" name="question" rows="2" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="edit-answer">Answer</label>
+                <textarea class="textarea" id="edit-answer" name="answer" rows="3" required></textarea>
+            </div>
+            <div style="display:flex; gap:10px">
+                <button type="submit" class="btn btn-primary btn-sm">Save Card</button>
+                <button type="button" class="btn btn-ghost btn-sm" id="edit-cancel">Cancel</button>
+            </div>
+        </form>
     </div>
 
     <p class="hint" style="text-align:center; margin-top:16px">
@@ -66,7 +88,8 @@
         // Minimal JSON string escaping (quotes, backslashes, control chars are rare in AI output).
         q = q.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "").replace("\t", "\\t");
         a = a.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "").replace("\t", "\\t");
-        json.append("{\"question\":\"").append(q).append("\",\"answer\":\"").append(a).append("\"}");
+        json.append("{\"id\":").append(c.getId())
+            .append(",\"question\":\"").append(q).append("\",\"answer\":\"").append(a).append("\"}");
         if (i < cards.size() - 1) json.append(",");
     }
     out.print(json.toString());

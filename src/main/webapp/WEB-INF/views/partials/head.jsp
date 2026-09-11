@@ -11,8 +11,8 @@
                 + navUser.getName().trim().split("\\s+")[navUser.getName().trim().split("\\s+").length - 1]
                     .substring(0, 1).toUpperCase();
     }
-    Object dueCountAttr = request.getAttribute("dueCount");
-    String dueCount = dueCountAttr == null ? "" : String.valueOf(dueCountAttr);
+    Object shellDueAttr = request.getAttribute("dueCount");
+    String shellDue = shellDueAttr == null ? "" : String.valueOf(shellDueAttr);
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,18 +32,26 @@
         <nav class="side-nav">
             <span class="side-label">Study</span>
             <a href="<%= ctx %>/dashboard" class="<%= "dashboard".equals(navActive) ? "active" : "" %>"><span class="ico">🏠</span> Dashboard</a>
+            <a href="<%= ctx %>/session" class="<%= "session".equals(navActive) ? "active" : "" %>"><span class="ico">⚡</span> AI Study Session</a>
             <a href="<%= ctx %>/upload" class="<%= "upload".equals(navActive) ? "active" : "" %>"><span class="ico">📄</span> Upload Notes</a>
             <a href="<%= ctx %>/history" class="<%= "history".equals(navActive) ? "active" : "" %>"><span class="ico">🗂</span> My Notes</a>
             <span class="side-label">Practice</span>
-            <a href="<%= ctx %>/review" class="<%= "flashcards".equals(navActive) ? "active" : "" %>"><span class="ico">🧠</span> Review <span class="side-badge"><%= dueCount.isEmpty() ? "•" : dueCount %></span></a>
+            <a href="<%= ctx %>/review" class="<%= "flashcards".equals(navActive) ? "active" : "" %>"><span class="ico">🧠</span> Review <span class="side-badge"><%= shellDue.isEmpty() ? "•" : shellDue %></span></a>
             <a href="<%= ctx %>/analytics" class="<%= "analytics".equals(navActive) ? "active" : "" %>"><span class="ico">📊</span> Analytics</a>
+            <a href="<%= ctx %>/calendar" class="<%= "calendar".equals(navActive) ? "active" : "" %>"><span class="ico">📅</span> Calendar</a>
+            <span class="side-label">Community</span>
+            <a href="<%= ctx %>/leaderboard" class="<%= "leaderboard".equals(navActive) ? "active" : "" %>"><span class="ico">🏆</span> Leaderboard</a>
+            <a href="<%= ctx %>/profile" class="<%= "profile".equals(navActive) ? "active" : "" %>"><span class="ico">👤</span> Profile</a>
         </nav>
         <div class="side-bottom">
             <div class="side-user">
                 <span class="avatar"><%= initials %></span>
                 <span class="side-user-name"><%= navUser != null ? navUser.getName() : "" %></span>
             </div>
-            <a class="btn btn-ghost btn-sm btn-block" href="<%= ctx %>/logout">Logout</a>
+            <div style="display:flex; gap:6px">
+                <a class="btn btn-ghost btn-sm" style="flex:1" href="<%= ctx %>/settings" title="Settings">⚙</a>
+                <a class="btn btn-ghost btn-sm" style="flex:1" href="<%= ctx %>/logout">Logout</a>
+            </div>
         </div>
     </aside>
     <div class="sidebar-scrim" id="sidebar-scrim"></div>

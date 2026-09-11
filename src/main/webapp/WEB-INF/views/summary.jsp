@@ -3,6 +3,7 @@
 <%@ page import="com.studily.model.StudyKit" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Map" %>
 <%@ include file="partials/head.jsp" %>
 <%@ include file="partials/flash.jsp" %>
 <%
@@ -11,6 +12,7 @@
     int flashcardCount = (Integer) request.getAttribute("flashcardCount");
     int mcqCount = (Integer) request.getAttribute("mcqCount");
     boolean needsGeneration = (Boolean) request.getAttribute("needsGeneration");
+    Map<Integer, String> subjects = (Map<Integer, String>) request.getAttribute("subjects");
     DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMM d, yyyy");
 %>
 <div class="container">
@@ -23,6 +25,31 @@
             </div>
             <a class="btn btn-ghost btn-sm" href="<%= ctx %>/dashboard">← Dashboard</a>
         </div>
+    </div>
+
+    <div class="action-bar card rise rise-1">
+        <form method="post" action="<%= ctx %>/note-edit">
+            <input type="hidden" name="action" value="bookmark">
+            <input type="hidden" name="noteId" value="<%= note.getNoteId() %>">
+            <input type="hidden" name="value" value="<%= note.isBookmarked() %>">
+            <button type="submit" class="btn btn-sm <%= note.isBookmarked() ? "btn-secondary" : "btn-ghost" %>">
+                <%= note.isBookmarked() ? "⭐ Bookmarked" : "☆ Bookmark" %>
+            </button>
+        </form>
+        <form method="post" action="<%= ctx %>/share">
+            <input type="hidden" name="noteId" value="<%= note.getNoteId() %>">
+            <button type="submit" class="btn btn-ghost btn-sm">🔗 Share link</button>
+        </form>
+        <form method="post" action="<%= ctx %>/subjects" class="subject-form">
+            <input type="hidden" name="action" value="assign">
+            <input type="hidden" name="noteId" value="<%= note.getNoteId() %>">
+            <select class="input input-sm" name="subjectId" onchange="this.form.submit()">
+                <option value="" <%= note.getSubjectId() == null ? "selected" : "" %>>📁 No folder</option>
+                <% for (Map.Entry<Integer, String> s : subjects.entrySet()) { %>
+                <option value="<%= s.getKey() %>" <%= note.getSubjectId() != null && note.getSubjectId() == s.getKey() ? "selected" : "" %>><%= s.getValue() %></option>
+                <% } %>
+            </select>
+        </form>
     </div>
 
     <% if (needsGeneration) { %>

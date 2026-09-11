@@ -18,13 +18,14 @@
         </div>
 
         <div class="form-group">
-            <label>Your Notes</label>
+            <label>Your Notes <span class="text-dim" style="font-weight:400">— upload queue: pick several PDFs at once</span></label>
             <div class="upload-zone" id="upload-zone">
                 <div class="zone-icon">📄</div>
-                <h3>Drag &amp; drop your PDF here</h3>
-                <p id="file-label">or click to browse — PDF up to 10 MB</p>
-                <input type="file" id="pdf-input" name="pdfFile" accept="application/pdf,.pdf" hidden>
+                <h3>Drag &amp; drop your PDFs here</h3>
+                <p id="file-label">or click to browse — multiple PDFs welcome, up to 10 MB each</p>
+                <input type="file" id="pdf-input" name="pdfFile" accept="application/pdf,.pdf" multiple hidden>
             </div>
+            <div class="upload-queue" id="upload-queue"></div>
         </div>
 
         <div class="form-group">
@@ -48,6 +49,28 @@
 </div>
 <script>
     // Show a premium loading state while the AI generation round-trips.
+    var pdfInput = document.getElementById('pdf-input');
+    var queueBox = document.getElementById('upload-queue');
+
+    function renderQueue(files) {
+        queueBox.innerHTML = '';
+        if (!files.length) { queueBox.style.display = 'none'; return; }
+        queueBox.style.display = 'block';
+        for (var i = 0; i < files.length; i++) {
+            var f = files[i];
+            var row = document.createElement('div');
+            row.className = 'queue-row';
+            row.innerHTML = '<span class="q-icon">📄</span><span class="q-name"></span>' +
+                '<span class="q-size text-dim">' + (f.size / 1048576).toFixed(1) + ' MB</span>';
+            row.querySelector('.q-name').textContent = f.name;
+            queueBox.appendChild(row);
+        }
+        var label = document.getElementById('file-label');
+        label.textContent = files.length === 1 ? files[0].name : files.length + ' PDFs queued';
+    }
+
+    pdfInput.addEventListener('change', function () { renderQueue(Array.from(pdfInput.files)); });
+
     document.getElementById('upload-form').addEventListener('submit', function () {
         var btn = document.getElementById('upload-btn');
         btn.disabled = true;
