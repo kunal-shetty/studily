@@ -25,17 +25,18 @@
     <div class="page-head rise">
         <div class="flex-between">
             <div>
-                <h1>📅 Study Calendar</h1>
+                <h1>Study Calendar</h1>
                 <p>Your revision rhythm — click any day to see what you did.</p>
             </div>
             <div class="cal-nav">
-                <a class="btn btn-ghost btn-sm" href="<%= ctx %>/calendar?y=<%= prev.getYear() %>&m=<%= prev.getMonthValue() %>">← <%= prev.format(DateTimeFormatter.ofPattern("MMM")) %></a>
+                <a class="btn btn-ghost btn-sm" href="<%= ctx %>/calendar?y=<%= prev.getYear() %>&m=<%= prev.getMonthValue() %>"><svg class="i i-sm"><use href="#i-chevron-left"/></svg> <%= prev.format(DateTimeFormatter.ofPattern("MMM")) %></a>
                 <strong><%= month.format(monthFmt) %></strong>
-                <a class="btn btn-ghost btn-sm" href="<%= ctx %>/calendar?y=<%= next.getYear() %>&m=<%= next.getMonthValue() %>"><%= next.format(DateTimeFormatter.ofPattern("MMM")) %> →</a>
+                <a class="btn btn-ghost btn-sm" href="<%= ctx %>/calendar?y=<%= next.getYear() %>&m=<%= next.getMonthValue() %>"><%= next.format(DateTimeFormatter.ofPattern("MMM")) %> <svg class="i i-sm"><use href="#i-chevron-right"/></svg></a>
             </div>
         </div>
     </div>
 
+    <div class="cal-layout">
     <div class="card rise rise-1">
         <div class="cal-grid">
             <% for (String d : new String[]{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"}) { %>
@@ -64,9 +65,9 @@
         </div>
     </div>
 
-    <div class="card mt-3 rise rise-2">
+    <div class="card rise rise-2">
         <div class="card-title">
-            <span class="icon">🗓</span>
+            <span class="icon"><svg class="i"><use href="#i-calendar"/></svg></span>
             <h3><%= selectedDate == null ? "Pick a day above" : "Activity on " + selectedDate.format(DateTimeFormatter.ofPattern("EEEE, MMM d")) %></h3>
         </div>
         <% if (selectedActivities.isEmpty()) { %>
@@ -77,12 +78,13 @@
             <% for (Map<String, Object> a : selectedActivities) { %>
         <div class="list-row">
             <div class="list-main">
-                <div class="list-title"><%= a.get("icon") %> <%= a.get("detail") %></div>
+                <div class="list-title"><svg class="i i-sm" style="color:var(--text-faint); margin-right:8px"><use href="#i-<%= a.get("icon") %>"/></svg><%= a.get("detail") %></div>
             </div>
             <div class="list-actions"><span class="badge"><%= a.get("extra") %></span></div>
         </div>
             <% } %>
         <% } %>
     </div>
+    </div><%-- /.cal-layout --%>
 </div>
 <%@ include file="partials/footer.jsp" %>
