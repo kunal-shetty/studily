@@ -5,7 +5,7 @@ package com.studily.model;
  */
 public class UserSettings {
 
-    public static final String[] ACCENTS = { "blue", "violet", "emerald", "rose" };
+    public static final String[] ACCENTS = { "gold", "blue", "violet", "emerald", "rose" };
     public static final String[] AI_MODELS = {
             "llama-3.3-70b-versatile",
             "llama-3.1-8b-instant",
@@ -15,13 +15,13 @@ public class UserSettings {
 
     private int userId;
     private String theme = "dark";
-    private String accent = "blue";
+    private String accent = "gold";
     private String aiModel = "llama-3.3-70b-versatile";
     private boolean notifications = true;
 
     public static String safeAccent(String value) {
         for (String a : ACCENTS) if (a.equals(value)) return a;
-        return "blue";
+        return "gold";
     }
 
     public static String safeModel(String value) {
