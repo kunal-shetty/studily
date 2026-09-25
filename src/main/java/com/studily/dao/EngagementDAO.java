@@ -105,7 +105,7 @@ public class EngagementDAO {
                 ps.setInt(1, userId);
                 ps.setObject(2, day);
                 try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) out.add(row("📝", "Quiz on " + rs.getString("detail"),
+                    while (rs.next()) out.add(row("help", "Quiz on " + rs.getString("detail"),
                             rs.getObject("pct") == null ? "" : rs.getInt("pct") + "% accuracy"));
                 }
             }
@@ -117,7 +117,7 @@ public class EngagementDAO {
                 ps.setObject(2, day);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next() && rs.getInt("c") > 0)
-                        out.add(row("🧠", "Reviewed flashcards", rs.getInt("c") + " cards"));
+                        out.add(row("cpu", "Reviewed flashcards", rs.getInt("c") + " cards"));
                 }
             }
 
@@ -126,7 +126,7 @@ public class EngagementDAO {
                 ps.setInt(1, userId);
                 ps.setObject(2, day);
                 try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) out.add(row("📤", "Uploaded " + rs.getString("title"), ""));
+                    while (rs.next()) out.add(row("upload", "Uploaded " + rs.getString("title"), ""));
                 }
             }
 
@@ -137,7 +137,7 @@ public class EngagementDAO {
                 ps.setObject(2, day);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next() && rs.getInt("c") > 0)
-                        out.add(row("💬", "AI chat questions", rs.getInt("c") + " asked"));
+                        out.add(row("message", "AI chat questions", rs.getInt("c") + " asked"));
                 }
             }
         }
