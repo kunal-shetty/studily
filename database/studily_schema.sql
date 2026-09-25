@@ -1,5 +1,5 @@
 -- =====================================================
--- Studily - Database Schema
+-- SnapNotes - Database Schema
 -- MySQL 8.x  |  Run: mysql -u root -p < studily_schema.sql
 -- =====================================================
 
