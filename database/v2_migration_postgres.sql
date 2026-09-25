@@ -1,5 +1,5 @@
 -- =====================================================
--- Studily v2.0 — Database Migration (Supabase PostgreSQL)
+-- SnapNotes v2.0 — Database Migration (Supabase PostgreSQL)
 -- Run in Supabase Dashboard → SQL Editor (paste, Run)
 -- Safe to re-run (IF NOT EXISTS everywhere).
 -- =====================================================
