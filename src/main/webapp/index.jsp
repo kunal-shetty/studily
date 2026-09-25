@@ -11,15 +11,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Studily — AI-Powered Study Assistant</title>
+    <title>SnapNotes — Turn Notes Into Flashcards, Quizzes &amp; Audio</title>
+    <meta name="description" content="SnapNotes turns your notes into AI-generated flashcards, quizzes and audio so you actually remember what you study.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<%= ctx %>/assets/css/studily.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="<%= ctx %>/assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="alternate icon" href="<%= ctx %>/assets/img/favicon.svg">
+    <link rel="stylesheet" href="<%= ctx %>/assets/css/snapnotes.css">
 </head>
 <body>
+<%@ include file="WEB-INF/views/partials/icons.jsp" %>
 <nav class="navbar">
-    <a class="brand" href="<%= ctx %>/index.jsp"><span class="logo-dot">S</span> Studily</a>
+    <a class="brand" href="<%= ctx %>/index.jsp"><img class="logo-dot" src="<%= ctx %>/assets/img/logo.svg" alt="" width="26" height="26"> SnapNotes</a>
     <div class="nav-user">
         <% if (loggedIn) { %>
         <a class="btn btn-primary btn-sm" href="<%= ctx %>/dashboard">Go to Dashboard</a>
@@ -31,46 +35,57 @@
 </nav>
 
 <div class="hero rise">
-    <span class="badge badge-primary" style="margin-bottom:18px">✨ Powered by Groq AI</span>
-    <h1>Turn lecture notes into <span class="grad-text">study material</span> in seconds.</h1>
-    <p>Upload a PDF or paste your notes. Studily generates concise summaries, interactive flashcards,
-       and exam-ready MCQ quizzes — instantly.</p>
+    <span class="badge badge-primary" style="margin-bottom:18px"><svg class="i"><use href="#i-zap"/></svg> We're live now</span>
+    <h1>Your notes. <span class="grad-text">Supercharged.</span></h1>
+    <p>Stop re-reading the same notes and blanking in the exam. SnapNotes turns your notes into
+       flashcards, quizzes, and audio — so you actually remember.</p>
     <div class="hero-cta">
         <% if (loggedIn) { %>
         <a class="btn btn-primary" href="<%= ctx %>/dashboard">Open Dashboard</a>
         <a class="btn btn-secondary" href="<%= ctx %>/upload">Upload Notes</a>
         <% } else { %>
         <a class="btn btn-primary" href="<%= ctx %>/register">Start Free →</a>
-        <a class="btn btn-secondary" href="<%= ctx %>/login">Log In</a>
+        <a class="btn btn-secondary" href="#features">See Features</a>
         <% } %>
     </div>
+    <p class="hero-proof">Join 2,400+ students studying smarter.</p>
 </div>
 
-<div class="features-grid">
+<div class="features-grid" id="features">
     <div class="card hoverable feature-card rise rise-1">
-        <div class="icon">📄</div>
+        <div class="icon"><svg class="i"><use href="#i-file"/></svg></div>
         <h3>Instant Summaries</h3>
         <p>Key concepts, definitions, and exam tips extracted from your notes by AI.</p>
     </div>
     <div class="card hoverable feature-card rise rise-2">
-        <div class="icon">🃏</div>
+        <div class="icon"><svg class="i"><use href="#i-cards"/></svg></div>
         <h3>Smart Flashcards</h3>
-        <p>Flip, shuffle, and navigate AI-generated cards. Mark what you know.</p>
+        <p>Flip, shuffle, and navigate AI-generated cards with spaced repetition built in.</p>
+    </div>
+    <div class="card hoverable feature-card rise rise-2">
+        <div class="icon"><svg class="i"><use href="#i-cpu"/></svg></div>
+        <h3>MCQ Quizzes</h3>
+        <p>Timed quizzes and mock tests with instant feedback and AI explanations.</p>
     </div>
     <div class="card hoverable feature-card rise rise-3">
-        <div class="icon">🧠</div>
-        <h3>MCQ Quizzes</h3>
-        <p>Timed quizzes with instant feedback and AI explanations for every answer.</p>
+        <div class="icon"><svg class="i"><use href="#i-volume"/></svg></div>
+        <h3>Audio Revision</h3>
+        <p>Listen to your summaries and flashcards read aloud — study on the move.</p>
+    </div>
+    <div class="card hoverable feature-card rise rise-3">
+        <div class="icon"><svg class="i"><use href="#i-map"/></svg></div>
+        <h3>Mind Maps</h3>
+        <p>AI builds a visual hierarchy of your notes so the big picture sticks.</p>
     </div>
     <div class="card hoverable feature-card rise rise-4">
-        <div class="icon">🔥</div>
+        <div class="icon"><svg class="i"><use href="#i-flame"/></svg></div>
         <h3>Track Progress</h3>
-        <p>Streaks, scores, and study history — all your revision data in one dashboard.</p>
+        <p>Streaks, scores, badges and leaderboards — all your revision data in one place.</p>
     </div>
 </div>
 
 <div class="footer">
-    Studily — AI-Powered Study Assistant · Java EE · MySQL · Groq
+    SnapNotes — AI-Powered Study Assistant · Java EE · PostgreSQL · Groq
 </div>
 <script src="<%= ctx %>/assets/js/app.js"></script>
 </body>
