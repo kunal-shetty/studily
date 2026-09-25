@@ -10,18 +10,18 @@
 %>
 <div class="container-narrow">
     <div class="page-head rise">
-        <h1>🧠 Review Session</h1>
+        <h1>Review Session</h1>
         <p>Spaced repetition: cards return right before you'd forget them.</p>
     </div>
 
     <div class="stats-grid">
         <div class="stat-card rise rise-1">
-            <span class="stat-icon">📥</span>
+            <span class="stat-icon"><svg class="i"><use href="#i-inbox"/></svg></span>
             <div class="stat-value"><%= dueCount %></div>
             <div class="stat-label">Cards due now</div>
         </div>
         <div class="stat-card rise rise-2">
-            <span class="stat-icon">✅</span>
+            <span class="stat-icon"><svg class="i"><use href="#i-check"/></svg></span>
             <div class="stat-value"><%= totalReviews %></div>
             <div class="stat-label">Total reviews done</div>
         </div>
@@ -30,7 +30,7 @@
     <% if (dueCards.isEmpty()) { %>
     <div class="card rise" style="text-align:center; padding:48px 24px">
         <div class="empty-state">
-            <div class="empty-icon">🎉</div>
+            <div class="empty-icon"><svg class="i"><use href="#i-check-circle"/></svg></div>
             <h3>Nothing due — you're all caught up!</h3>
             <p>Cards reappear automatically as their schedules come due.</p>
             <a class="btn btn-primary mt-2" href="<%= ctx %>/history">Study new material</a>
@@ -60,10 +60,10 @@
     <p class="hint" style="text-align:center; margin-top:14px">Click the card to reveal the answer, then rate your recall:</p>
 
     <div class="rating-row rise rise-3">
-        <button class="btn rating-btn again" data-rating="1">😖 Again</button>
-        <button class="btn rating-btn hard" data-rating="2">😅 Hard</button>
-        <button class="btn rating-btn good" data-rating="3">🙂 Good</button>
-        <button class="btn rating-btn easy" data-rating="4">😎 Easy</button>
+        <button class="btn rating-btn again" data-rating="1">Again</button>
+        <button class="btn rating-btn hard" data-rating="2">Hard</button>
+        <button class="btn rating-btn good" data-rating="3">Good</button>
+        <button class="btn rating-btn easy" data-rating="4">Easy</button>
     </div>
     <% } %>
 </div>
