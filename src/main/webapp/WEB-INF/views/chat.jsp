@@ -12,7 +12,7 @@
     <div class="page-head rise">
         <div class="flex-between">
             <div>
-                <h1>💬 AI Chat</h1>
+                <h1>AI Chat</h1>
                 <p>Ask anything about <strong style="color:var(--text)"><%= note.getTitle() %></strong> — answers come only from your notes.</p>
             </div>
             <a class="btn btn-ghost btn-sm" href="<%= ctx %>/summary?noteId=<%= note.getNoteId() %>">← Summary</a>
@@ -23,7 +23,7 @@
         <div class="chat-scroll" id="chat-scroll">
             <% if (history.isEmpty()) { %>
             <div class="chat-empty">
-                <div style="font-size:2rem; margin-bottom:8px">🤖</div>
+                <svg class="i i-lg"><use href="#i-bot"/></svg>
                 <p>Ask your first question below — the AI answers strictly from this note.</p>
             </div>
             <div class="chat-suggest">
