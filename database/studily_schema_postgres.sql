@@ -1,5 +1,5 @@
 -- =====================================================
--- Studily Database Schema — Supabase (PostgreSQL)
+-- SnapNotes Database Schema — Supabase (PostgreSQL)
 -- Run in Supabase Dashboard → SQL Editor (paste whole file, Run)
 -- =====================================================
 
