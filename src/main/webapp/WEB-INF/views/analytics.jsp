@@ -11,23 +11,23 @@
 %>
 <div class="container">
     <div class="page-head rise">
-        <h1>📊 Analytics</h1>
+        <h1>Analytics</h1>
         <p>Your consistency, accuracy, and the topics that need work.</p>
     </div>
 
     <div class="stats-grid">
         <div class="stat-card rise rise-1">
-            <span class="stat-icon">✅</span>
+            <span class="stat-icon"><svg class="i"><use href="#i-check"/></svg></span>
             <div class="stat-value"><%= analytics.getTotalReviews() %></div>
             <div class="stat-label">Flashcards reviewed</div>
         </div>
         <div class="stat-card rise rise-2">
-            <span class="stat-icon">📥</span>
+            <span class="stat-icon"><svg class="i"><use href="#i-inbox"/></svg></span>
             <div class="stat-value"><%= analytics.getDueCount() %></div>
             <div class="stat-label">Cards due now</div>
         </div>
         <div class="stat-card rise rise-3">
-            <span class="stat-icon">🎯</span>
+            <span class="stat-icon"><svg class="i"><use href="#i-target"/></svg></span>
             <div class="stat-value"><%= analytics.getQuizTrend().isEmpty() ? "—" :
                     String.format("%.0f", analytics.getQuizTrend().get(analytics.getQuizTrend().size() - 1).getPercentage()) %>%</div>
             <div class="stat-label">Latest quiz accuracy</div>
@@ -35,16 +35,28 @@
     </div>
 
     <div class="card rise rise-2 mb-3">
-        <div class="card-title"><span class="icon">🔥</span><h3>Study Heatmap <span class="text-dim" style="font-size:0.8rem; font-weight:400">(last 120 days)</span></h3></div>
-        <div class="heatmap" id="heatmap"></div>
+        <div class="card-title"><span class="icon"><svg class="i"><use href="#i-flame"/></svg></span><h3>Study Heatmap <span class="text-dim" style="font-size:0.8rem; font-weight:400">(last 120 days)</span></h3></div>
+        <div class="heatmap-wrap">
+            <div class="heatmap-days" aria-hidden="true"><span>Mon</span><span>Wed</span><span>Fri</span></div>
+            <div class="heatmap" id="heatmap"></div>
+        </div>
+        <div class="heatmap-legend">
+            <span>Less</span>
+            <i class="heat-cell"></i>
+            <i class="heat-cell l1"></i>
+            <i class="heat-cell l2"></i>
+            <i class="heat-cell l3"></i>
+            <i class="heat-cell l4"></i>
+            <span>More</span>
+        </div>
     </div>
 
     <div class="grid-2">
         <div class="card rise rise-3">
-            <div class="card-title"><span class="icon">📈</span><h3>Quiz Accuracy Trend</h3></div>
+            <div class="card-title"><span class="icon"><svg class="i"><use href="#i-trending"/></svg></span><h3>Quiz Accuracy Trend</h3></div>
             <% if (analytics.getQuizTrend().isEmpty()) { %>
             <div class="empty-state" style="padding:26px">
-                <div class="empty-icon">🧠</div>
+                <div class="empty-icon"><svg class="i"><use href="#i-cpu"/></svg></div>
                 <h3>No quizzes yet</h3>
                 <p>Take a quiz to start tracking accuracy.</p>
             </div>
@@ -54,17 +66,17 @@
         </div>
 
         <div class="card rise rise-4">
-            <div class="card-title"><span class="icon">⚠️</span><h3>Weak Topics <span class="text-dim" style="font-size:0.8rem; font-weight:400">AI-detected</span></h3></div>
+            <div class="card-title"><span class="icon"><svg class="i"><use href="#i-alert"/></svg></span><h3>Weak Topics <span class="text-dim" style="font-size:0.8rem; font-weight:400">AI-detected</span></h3></div>
             <% if (analytics.getWeakTopics().isEmpty()) { %>
             <div class="empty-state" style="padding:26px">
-                <div class="empty-icon">💪</div>
+                <div class="empty-icon"><svg class="i"><use href="#i-zap"/></svg></div>
                 <h3>No weak spots detected</h3>
                 <p>Take more quizzes — the AI flags topics from wrong answers.</p>
             </div>
             <% } else { %>
                 <% for (AnalyticsData.WeakTopic t : analytics.getWeakTopics()) { %>
             <div class="weak-topic">
-                <span style="font-size:1.1rem">⚠️</span>
+                <svg class="i"><use href="#i-alert"/></svg>
                 <div>
                     <div class="wt-topic"><%= t.getTopic() %></div>
                     <div class="wt-reason"><%= t.getReason() %></div>
