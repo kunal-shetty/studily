@@ -12,17 +12,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Account · Studily</title>
+    <title>Create Account · SnapNotes</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<%= ctx %>/assets/css/studily.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="<%= ctx %>/assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="alternate icon" href="<%= ctx %>/assets/img/favicon.svg">
+    <link rel="stylesheet" href="<%= ctx %>/assets/css/snapnotes.css">
 </head>
 <body>
 <div class="auth-wrap">
     <div class="auth-card">
-        <a class="brand" href="<%= ctx %>/index.jsp"><span class="logo-dot">S</span> Studily</a>
-        <p class="auth-sub">Turn your notes into study material in seconds.</p>
+        <a class="brand" href="<%= ctx %>/index.jsp"><img class="logo-dot" src="<%= ctx %>/assets/img/logo.svg" alt="" width="26" height="26"> SnapNotes</a>
+        <p class="auth-sub">Turn your notes into flashcards, quizzes and audio in seconds.</p>
 
         <form method="post" action="<%= ctx %>/register">
             <div class="form-group">
