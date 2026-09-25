@@ -20,11 +20,11 @@ public class ProfileData {
     private int weeklyRank;
 
     public static Map<String, String[]> BADGE_META = Map.of(
-            "streak_7", new String[]{ "🔥", "7-Day Streak", "Studied 7 days in a row" },
-            "flashcards_100", new String[]{ "📚", "Century Cards", "100 flashcards generated" },
-            "accuracy_90", new String[]{ "🎯", "Sharpshooter", "90%+ average quiz accuracy" },
-            "notes_10", new String[]{ "📁", "Librarian", "10 notes uploaded" },
-            "first_quiz", new String[]{ "🧪", "First Quiz", "Completed your first quiz" }
+            "streak_7", new String[]{ "flame", "7-Day Streak", "Studied 7 days in a row" },
+            "flashcards_100", new String[]{ "cards", "Century Cards", "100 flashcards generated" },
+            "accuracy_90", new String[]{ "target", "Sharpshooter", "90%+ average quiz accuracy" },
+            "notes_10", new String[]{ "folder", "Librarian", "10 notes uploaded" },
+            "first_quiz", new String[]{ "check-circle", "First Quiz", "Completed your first quiz" }
     );
 
     public String getName() { return name; }
