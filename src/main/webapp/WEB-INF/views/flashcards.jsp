@@ -15,7 +15,7 @@
                 <h1>Flashcards</h1>
                 <p><%= note.getTitle() %> · <%= cards.size() %> cards</p>
             </div>
-            <a class="btn btn-ghost btn-sm" href="<%= ctx %>/summary?noteId=<%= note.getNoteId() %>">← Summary</a>
+            <a class="btn btn-ghost btn-sm" href="<%= ctx %>/summary?noteId=<%= note.getNoteId() %>"><svg class="i i-sm"><use href="#i-chevron-left"/></svg> Summary</a>
         </div>
     </div>
 
@@ -39,20 +39,21 @@
     </div>
 
     <div class="flashcard-nav rise rise-3">
-        <button class="btn btn-secondary" id="btn-prev">← Prev</button>
+        <button class="btn btn-secondary" id="btn-prev"><svg class="i i-sm"><use href="#i-chevron-left"/></svg> Prev</button>
         <span class="flashcard-counter" id="card-counter"></span>
-        <button class="btn btn-secondary" id="btn-next">Next →</button>
+        <button class="btn btn-secondary" id="btn-next">Next <svg class="i i-sm"><use href="#i-chevron-right"/></svg></button>
     </div>
 
     <div class="flashcard-nav rise rise-3" style="margin-top:12px">
-        <button class="btn btn-ghost btn-sm" id="btn-shuffle">🔀 Shuffle</button>
-        <button class="btn btn-secondary btn-sm" id="btn-known">✓ Mark Known</button>
-        <button class="btn btn-ghost btn-sm" id="btn-edit">✏️ Edit Card</button>
+        <button class="btn btn-ghost btn-sm" id="btn-shuffle"><svg class="i"><use href="#i-shuffle"/></svg> Shuffle</button>
+        <button class="btn btn-secondary btn-sm" id="btn-known"><svg class="i"><use href="#i-check"/></svg> Mark Known</button>
+        <button class="btn btn-ghost btn-sm" id="btn-listen-card" title="Read this card aloud"><svg class="i"><use href="#i-volume"/></svg> Listen</button>
+        <button class="btn btn-ghost btn-sm" id="btn-edit"><svg class="i"><use href="#i-pen"/></svg> Edit Card</button>
         <span class="badge" id="known-count">0 marked</span>
     </div>
 
     <div class="card mt-3 rise rise-3" id="card-editor" style="display:none">
-        <div class="card-title"><span class="icon">✏️</span><h3>Edit this card</h3></div>
+        <div class="card-title"><span class="icon"><svg class="i"><use href="#i-pen"/></svg></span><h3>Edit this card</h3></div>
         <form method="post" action="<%= ctx %>/note-edit">
             <input type="hidden" name="action" value="edit-card">
             <input type="hidden" name="noteId" value="<%= note.getNoteId() %>">
