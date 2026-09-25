@@ -14,8 +14,8 @@
     int score = (Integer) request.getAttribute("score");
     int total = (Integer) request.getAttribute("total");
     int pct = total == 0 ? 0 : (int) Math.round((score * 100.0) / total);
-    String verdict = pct >= 80 ? "Outstanding! 🎉" : pct >= 60 ? "Good work! 👍"
-            : pct >= 40 ? "Keep practicing 💪" : "Review the notes and retry 📖";
+    String verdict = pct >= 80 ? "Outstanding!" : pct >= 60 ? "Good work!"
+            : pct >= 40 ? "Keep practicing" : "Review the notes and retry";
 %>
 <div class="container-narrow">
     <div class="page-head rise">
@@ -37,8 +37,8 @@
             <p>You scored <strong style="color:var(--text)"><%= score %> out of <%= total %></strong>
                 (<%= pct %>%) · saved to your history.</p>
             <div class="mt-2" style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap">
-                <a class="btn btn-secondary" href="<%= ctx %>/quiz?noteId=<%= note.getNoteId() %>">🔄 Retake Quiz</a>
-                <a class="btn btn-primary" href="<%= ctx %>/flashcards?noteId=<%= note.getNoteId() %>">🃏 Study Flashcards</a>
+                <a class="btn btn-secondary" href="<%= ctx %>/quiz?noteId=<%= note.getNoteId() %>"><svg class="i"><use href="#i-refresh"/></svg> Retake Quiz</a>
+                <a class="btn btn-primary" href="<%= ctx %>/flashcards?noteId=<%= note.getNoteId() %>"><svg class="i"><use href="#i-cards"/></svg> Study Flashcards</a>
             </div>
         </div>
     </div>
@@ -54,7 +54,7 @@
     %>
     <div class="card rise" style="margin-bottom:14px">
         <div class="card-title" style="margin-bottom:10px">
-            <span class="icon"><%= wasCorrect ? "✅" : "❌" %></span>
+            <span class="icon"><svg class="i"><use href="#i-<%= wasCorrect ? "check" : "x" %>"/></svg></span>
             <h3 style="font-size:1rem"><%= i + 1 %>. <%= m.getQuestion() %></h3>
             <span class="badge <%= m.getDifficulty() %>" style="margin-left:auto"><%= m.getDifficulty() %></span>
         </div>
@@ -83,7 +83,7 @@
             <input type="hidden" name="noteId" value="<%= note.getNoteId() %>">
             <input type="hidden" name="mcqId" value="<%= m.getId() %>">
             <input type="hidden" name="chosen" value="<%= pick == null ? "" : pick %>">
-            <button type="submit" class="btn btn-secondary btn-sm">🧭 Explain my mistake</button>
+            <button type="submit" class="btn btn-secondary btn-sm"><svg class="i"><use href="#i-compass"/></svg> Explain my mistake</button>
         </form>
         <% } %>
     </div>
