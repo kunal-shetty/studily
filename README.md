@@ -1,6 +1,6 @@
-# Studily — AI-Powered Study Assistant
+# SnapNotes — Turn Notes Into Flashcards, Quizzes & Audio
 
-Turn lecture notes into **summaries, flashcards, and MCQ quizzes** in seconds.
+Turn lecture notes into **summaries, flashcards, MCQ quizzes, and audio** in seconds.
 Built with Java EE (JSP + Servlets), PostgreSQL (Supabase), JDBC, Apache Tomcat, and the Groq API.
 
 ## ✨ Features
@@ -12,7 +12,8 @@ Built with Java EE (JSP + Servlets), PostgreSQL (Supabase), JDBC, Apache Tomcat,
 | **AI** | Groq chat completions → strict JSON → summary, key concepts, definitions, exam tips, flashcards, MCQs |
 | **Flashcards** | 3D flip, shuffle, keyboard navigation, "mark known" progress |
 | **Quiz** | Difficulty filter, countdown timer with auto-submit, instant feedback, AI explanations, saved attempts |
-| **Dashboard** | Live MySQL-backed stats: notes, flashcards, average score, study streak, recent activity |
+| **Audio** ⭐ | Listen to summaries and full notes out loud via the browser's Web Speech API — player bar with play/pause, stop, speed and voice picker |
+| **Dashboard** | Live PostgreSQL-backed stats: notes, flashcards, average score, study streak, recent activity |
 | **History** | Every note and quiz attempt, one page |
 | **AI Chat** ⭐ | NotebookLM-style chat per note — answers strictly from your material, full history saved |
 | **Spaced Repetition** ⭐ | Quizlet-style Again/Hard/Good/Easy ratings with SM-2 scheduling and due badges |
@@ -74,11 +75,11 @@ groq.api.key=YOUR_GROQ_API_KEY
 
 ```bash
 mvn clean package
-cp target/studily.war $CATALINA_HOME/webapps/
+cp target/snapnotes.war $CATALINA_HOME/webapps/
 $CATALINA_HOME/bin/startup.sh
 ```
 
-Open http://localhost:8080/studily/
+Open http://localhost:8080/snapnotes/
 
 **Requirements:** JDK 22, Maven 3.9+, Tomcat 10.1+ (Supabase hosts the database remotely, so no local DB install needed).
 
@@ -104,7 +105,7 @@ Open http://localhost:8080/studily/
 ## 🗺 Roadmap
 
 ~~AI chat with notes~~ ✅ · ~~spaced repetition~~ ✅ · ~~analytics + weak topics~~ ✅ · ~~global search~~ ✅ ·
-~~leaderboards~~ ✅ · ~~theme customization~~ ✅ · DOCX support · OCR for scanned PDFs · voice revision · study groups · mobile app
+~~leaderboards~~ ✅ · ~~theme customization~~ ✅ · ~~audio revision~~ ✅ · DOCX support · OCR for scanned PDFs · study groups · mobile app
 
 ## 🧬 v2.1 Database Migration
 
