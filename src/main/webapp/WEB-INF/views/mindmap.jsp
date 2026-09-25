@@ -10,10 +10,10 @@
     <div class="page-head rise">
         <div class="flex-between">
             <div>
-                <h1>🗺 Mind Map</h1>
+                <h1>Mind Map</h1>
                 <p><%= note.getTitle() %></p>
             </div>
-            <a class="btn btn-ghost btn-sm" href="<%= ctx %>/summary?noteId=<%= note.getNoteId() %>">← Summary</a>
+            <a class="btn btn-ghost btn-sm" href="<%= ctx %>/summary?noteId=<%= note.getNoteId() %>"><svg class="i i-sm"><use href="#i-chevron-left"/></svg> Summary</a>
         </div>
     </div>
 
