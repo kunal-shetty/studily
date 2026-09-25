@@ -1,26 +1,31 @@
 /* ============================================================
-   Studily — App JS
+   SnapNotes — App JS
    Flash messages · Flashcards · Quiz timer · Upload UX
-   Search · Modals · Heatmap · Charts · Review
+   Search · Modals · Heatmap · Charts · Review · Audio (TTS)
    ============================================================ */
 
 /* Context path for fetch/POST endpoints (set in footer partial). */
-window.studilyCtx = window.studilyCtx || '';
+window.snapnotesCtx = window.snapnotesCtx || '';
+
+/* Inline SVG icon from the sprite rendered by partials/icons.jsp. */
+window.snIcon = function snIcon(name, cls) {
+    return '<svg class="' + (cls || 'i') + '" aria-hidden="true"><use href="#i-' + name + '"/></svg>';
+};
 
 /* ---------------- Flash toasts ---------------- */
 (function () {
     const stack = document.getElementById('flash-stack');
     if (!stack) return;
     const icons = {
-        success: '✓',
-        error: '✕',
-        info: 'ⓘ'
+        success: snIcon('check-circle'),
+        error: snIcon('x-circle'),
+        info: snIcon('info')
     };
     stack.querySelectorAll('.flash').forEach((el) => {
         const type = el.dataset.type || 'info';
         const icon = document.createElement('span');
         icon.className = 'flash-icon';
-        icon.textContent = icons[type] || icons.info;
+        icon.innerHTML = icons[type] || icons.info;
         el.prepend(icon);
         const dismiss = () => {
             el.classList.add('leaving');
@@ -63,8 +68,8 @@ window.studilyCtx = window.studilyCtx || '';
         flipped = false;
         if (knownCount) knownCount.textContent = known.size + ' marked';
         // Expose deck state for the card editor (and other consumers).
-        window.studilyDeckOrder = order;
-        window.studilyDeckPos = idx;
+        window.snapnotesDeckOrder = order;
+        window.snapnotesDeckPos = idx;
     }
 
     function flip() {
@@ -96,6 +101,14 @@ window.studilyCtx = window.studilyCtx || '';
         render();
     });
 
+    // Read the current card aloud (browser text-to-speech).
+    document.getElementById('btn-listen-card')?.addEventListener('click', () => {
+        const c = cards[order[idx]];
+        window.SnapNotesAudio.speak(
+            'Question. ' + c.question + ' Answer. ' + c.answer,
+            'Flashcard ' + (idx + 1) + ' of ' + cards.length);
+    });
+
     document.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
         if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
@@ -120,7 +133,7 @@ window.studilyCtx = window.studilyCtx || '';
 
     function tick() {
         const remain = Math.max(0, Math.floor((deadline - Date.now()) / 1000));
-        timerEl.textContent = '⏱ ' + fmt(remain);
+        timerEl.innerHTML = snIcon('clock', 'i i-sm') + ' ' + fmt(remain);
         timerEl.classList.remove('warning', 'danger');
         if (remain <= 60) timerEl.classList.add('warning');
         if (remain <= 15) timerEl.classList.add('danger');
@@ -223,9 +236,8 @@ window.studilyCtx = window.studilyCtx || '';
 /* ---------------- v2.1: theme + accent from Settings ---------------- */
 (function () {
     try {
-        var prefs = JSON.parse(localStorage.getItem('studily-prefs') || '{}');
-        if (prefs.theme === 'light') document.body.classList.add('theme-light');
-        if (prefs.accent && prefs.accent !== 'blue') document.body.classList.add('accent-' + prefs.accent);
+        var prefs = JSON.parse(localStorage.getItem('snapnotes-prefs') || '{}');
+        if (prefs.accent) document.body.classList.add('accent-' + prefs.accent);
     } catch (e) { /* first visit or blocked storage */ }
 })();
 
@@ -242,8 +254,8 @@ window.studilyCtx = window.studilyCtx || '';
     function currentCard() {
         try {
             var data = JSON.parse(document.getElementById('flashcard-data').textContent);
-            var order = window.studilyDeckOrder || data.map(function (_, i) { return i; });
-            var idx = window.studilyDeckPos || 0;
+            var order = window.snapnotesDeckOrder || data.map(function (_, i) { return i; });
+            var idx = window.snapnotesDeckPos || 0;
             return data[order[idx]] || data[idx];
         } catch (e) { return null; }
     }
@@ -287,7 +299,7 @@ window.studilyCtx = window.studilyCtx || '';
     const results = document.getElementById('search-results');
     if (!trigger || !modal || !input) return;
 
-    const icons = { note: '📄', flashcard: '🃏', quiz: '❓' };
+    const icons = { note: snIcon('file'), flashcard: snIcon('cards'), quiz: snIcon('help') };
     let debounce = null;
 
     function open() {
@@ -317,7 +329,7 @@ window.studilyCtx = window.studilyCtx || '';
         }
         debounce = setTimeout(async () => {
             try {
-                const res = await fetch(studilyCtx + '/search?q=' + encodeURIComponent(q));
+                const res = await fetch(snapnotesCtx + '/search?q=' + encodeURIComponent(q));
                 const data = await res.json();
                 if (!data.results || !data.results.length) {
                     results.innerHTML = '<div class="search-hint">No matches found.</div>';
@@ -325,7 +337,7 @@ window.studilyCtx = window.studilyCtx || '';
                 }
                 results.innerHTML = data.results.map((r) =>
                     '<a class="search-item" href="' + r.href + '">' +
-                    '<span class="si-icon">' + (icons[r.type] || '•') + '</span>' +
+                    '<span class="si-icon">' + (icons[r.type] || snIcon('file')) + '</span>' +
                     '<span><span class="si-label">' + esc(r.label) + '</span><br>' +
                     '<span class="si-sub">' + esc(r.sub) + '</span></span></a>'
                 ).join('');
@@ -355,17 +367,38 @@ function showConfirm(title, text, onOk) {
     modal.addEventListener('click', (e) => { if (e.target === modal) done(); }, { once: true });
 }
 
-/* ---------------- Heatmap ---------------- */
+/* ---------------- Heatmap ----------------
+   Columns are calendar weeks (Monday first), so every row is the same
+   weekday. Leading blanks pad the first week — otherwise the whole grid
+   is stair-stepped and rows mean nothing.                              */
 (function () {
     const el = document.getElementById('heatmap');
     if (!el) return;
     const data = JSON.parse(document.getElementById('heatmap-data').textContent);
+    const entries = Object.entries(data);
+    if (!entries.length) return;
+
+    const mondayOffset = (iso) => {
+        const d = new Date(iso + 'T00:00:00');
+        return isNaN(d.getTime()) ? 0 : (d.getDay() + 6) % 7;
+    };
+
     let html = '';
-    for (const [date, count] of Object.entries(data)) {
+    const lead = mondayOffset(entries[0][0]);
+    for (let i = 0; i < lead; i++) html += '<span class="heat-cell is-empty" aria-hidden="true"></span>';
+
+    for (const [date, count] of entries) {
         const lvl = count === 0 ? 0 : count <= 2 ? 1 : count <= 4 ? 2 : count <= 7 ? 3 : 4;
-        html += '<span class="heat-cell' + (lvl ? ' l' + lvl : '') + '" title="' + date + ': ' + count + ' activities"></span>';
+        html += '<span class="heat-cell' + (lvl ? ' l' + lvl : '') +
+                '" title="' + date + ': ' + count + ' activities"></span>';
     }
+
+    // Pad the final week so the last column is a full week too.
+    const tail = (7 - ((lead + entries.length) % 7)) % 7;
+    for (let i = 0; i < tail; i++) html += '<span class="heat-cell is-empty" aria-hidden="true"></span>';
+
     el.innerHTML = html;
+    el.scrollLeft = el.scrollWidth;
 })();
 
 /* ---------------- Accuracy trend chart ---------------- */
@@ -382,19 +415,19 @@ function showConfirm(title, text, onOk) {
             datasets: [{
                 label: 'Quiz accuracy %',
                 data: data.map((d) => d.pct),
-                borderColor: '#4f7cff',
-                backgroundColor: 'rgba(79,124,255,0.12)',
+                borderColor: '#f5b301',
+                backgroundColor: 'rgba(245,179,1,0.12)',
                 fill: true,
                 tension: 0.35,
                 pointRadius: 3,
-                pointBackgroundColor: '#7a5cff'
+                pointBackgroundColor: '#ffd166'
             }]
         },
         options: {
             plugins: { legend: { display: false } },
             scales: {
-                y: { min: 0, max: 100, ticks: { color: '#9aa3b5' }, grid: { color: 'rgba(255,255,255,0.06)' } },
-                x: { ticks: { color: '#9aa3b5', maxTicksLimit: 8 }, grid: { display: false } }
+                y: { min: 0, max: 100, ticks: { color: '#a1a1aa', font: { size: 11 } }, grid: { color: 'rgba(255,255,255,0.06)' }, border: { display: false } },
+                x: { ticks: { color: '#a1a1aa', font: { size: 11 }, maxTicksLimit: 8 }, grid: { display: false }, border: { display: false } }
             }
         }
     });
@@ -453,7 +486,7 @@ function showConfirm(title, text, onOk) {
             rated++;
             const form = document.createElement('form');
             form.method = 'post';
-            form.action = studilyCtx + '/review';
+            form.action = snapnotesCtx + '/review';
             form.innerHTML = '<input type="hidden" name="cardId" value="' + cards[idx].cardId + '">' +
                              '<input type="hidden" name="rating" value="' + btn.dataset.rating + '">';
             document.body.appendChild(form);
@@ -462,4 +495,175 @@ function showConfirm(title, text, onOk) {
     });
 
     render();
+})();
+
+/* ============================================================
+   Audio — Web Speech text-to-speech listener
+   Usage:
+     window.SnapNotesAudio.speak(text, title)
+     <button data-tts-src="#element">…</button>
+     <button data-tts-text="literal">…</button>
+   ============================================================ */
+(function () {
+    /* Graceful degradation on browsers without speech synthesis. */
+    if (!('speechSynthesis' in window)) {
+        document.querySelectorAll('.js-tts, [data-tts-src], [data-tts-text]').forEach(function (b) { b.style.display = 'none'; });
+        window.SnapNotesAudio = { speak: function () {}, stop: function () {}, supported: false };
+        return;
+    }
+
+    var synth = window.speechSynthesis;
+    var chunks = [];
+    var cursor = 0;
+    var current = null;
+    var title = '';
+    var rate = parseFloat(localStorage.getItem('snapnotes-tts-rate') || '1') || 1;
+    var preferredVoice = localStorage.getItem('snapnotes-tts-voice') || '';
+    var player, playBtn, stopBtn, titleEl, subEl, voiceSel, rateInput;
+
+    function setPlayerIcon(name) { if (playBtn) playBtn.innerHTML = snIcon(name); }
+
+    function buildPlayer() {
+        player = document.createElement('div');
+        player.className = 'audio-player';
+        player.id = 'snapnotes-player';
+        player.hidden = true;        player.innerHTML =
+            '<span class="track-icon">' + snIcon('headphones') + '</span>' +
+            '<div class="ap-info"><div class="ap-title" id="snapnotes-player-title">Audio</div>' +
+            '<div class="ap-sub" id="snapnotes-player-sub">Ready</div></div>' +
+            '<div class="ap-controls">' +
+                '<button type="button" class="audio-btn" id="snapnotes-play" title="Play / Pause">' + snIcon('pause') + '</button>' +
+                '<button type="button" class="btn btn-ghost btn-sm" id="snapnotes-stop">' + snIcon('stop') + ' Stop</button>' +
+            '</div>' +
+            '<label class="ap-speed">Speed <input type="range" id="snapnotes-rate" min="0.5" max="2" step="0.25" value="' + rate + '"></label>' +
+            '<select class="select input-sm ap-voice" id="snapnotes-voice" title="Voice"></select>';
+        document.body.appendChild(player);
+
+        playBtn = player.querySelector('#snapnotes-play');
+        stopBtn = player.querySelector('#snapnotes-stop');
+        titleEl = player.querySelector('#snapnotes-player-title');
+        subEl = player.querySelector('#snapnotes-player-sub');
+        voiceSel = player.querySelector('#snapnotes-voice');
+        rateInput = player.querySelector('#snapnotes-rate');
+
+        playBtn.addEventListener('click', toggle);
+        stopBtn.addEventListener('click', function () { stop(true); });
+        rateInput.addEventListener('input', function () {
+            rate = parseFloat(rateInput.value) || 1;
+            try { localStorage.setItem('snapnotes-tts-rate', String(rate)); } catch (e) { /* private mode */ }
+        });
+        voiceSel.addEventListener('change', function () {
+            preferredVoice = voiceSel.value;
+            try { localStorage.setItem('snapnotes-tts-voice', preferredVoice); } catch (e) { /* private mode */ }
+        });
+        loadVoices();
+    }
+
+    function loadVoices() {
+        if (!voiceSel) return;
+        var voices = synth.getVoices() || [];
+        if (!voices.length) return;
+        voiceSel.innerHTML = voices.map(function (v) {
+            var sel = (v.name === preferredVoice) ? ' selected' : '';
+            return '<option value="' + v.name.replace(/"/g, '') + '"' + sel + '>' + v.name + ' (' + v.lang + ')</option>';
+        }).join('');
+        // Default to an English voice when nothing was chosen yet.
+        if (!preferredVoice) {
+            var en = voices.filter(function (v) { return /^en/i.test(v.lang); });
+            if (en.length) { preferredVoice = en[0].name; voiceSel.value = preferredVoice; }
+        }
+    }
+
+    function splitText(text) {
+        var sentences = String(text).replace(/\s+/g, ' ').trim().match(/[^.!?]+[.!?]*/g) || [];
+        var out = [];
+        var buf = '';
+        sentences.forEach(function (s) {
+            if ((buf + s).length > 220) { if (buf) out.push(buf.trim()); buf = ''; }
+            buf += s + ' ';
+        });
+        if (buf.trim()) out.push(buf.trim());
+        return out.length ? out : [String(text).trim()];
+    }
+
+    function speakChunk(i) {
+        cursor = i;
+        if (i >= chunks.length) { subEl.textContent = 'Finished'; setPlayerIcon('play'); player.classList.remove('playing'); playBtn.classList.remove('playing'); return; }
+        subEl.textContent = 'Reading ' + (i + 1) + ' / ' + chunks.length;
+        current = new SpeechSynthesisUtterance(chunks[i]);
+        current.rate = rate;
+        if (preferredVoice && voiceSel) {
+            var match = (synth.getVoices() || []).filter(function (v) { return v.name === preferredVoice; })[0];
+            if (match) current.voice = match;
+        }
+        current.onend = function () { if (synth.speaking || cursor + 1 < chunks.length) speakChunk(i + 1); };
+        current.onerror = function () { speakChunk(i + 1); };
+        synth.speak(current);
+    }
+
+    function speak(text, t) {
+        if (!text || !String(text).trim()) return;
+        stop(false);
+        chunks = splitText(text);
+        title = t || 'SnapNotes Audio';
+        if (!player) buildPlayer();
+        titleEl.textContent = title;
+        loadVoices();
+        player.hidden = false;
+        setPlayerIcon('pause');
+        player.classList.add('playing');
+        playBtn.classList.add('playing');
+        speakChunk(0);
+    }
+
+    function toggle() {
+        if (synth.speaking && !synth.paused) {
+            synth.pause();
+            setPlayerIcon('play');
+            playBtn.classList.remove('playing');
+            player.classList.remove('playing');
+            if (subEl) subEl.textContent = 'Paused';
+        } else if (synth.paused) {
+            synth.resume();
+            setPlayerIcon('pause');
+            playBtn.classList.add('playing');
+            player.classList.add('playing');
+            if (subEl) subEl.textContent = 'Reading ' + (cursor + 1) + ' / ' + chunks.length;
+        } else if (chunks.length) {
+            speakChunk(cursor < chunks.length ? cursor : 0);
+            setPlayerIcon('pause');
+            playBtn.classList.add('playing');
+            player.classList.add('playing');
+        }
+    }
+
+    function stop(hide) {
+        synth.cancel();
+        current = null;
+        if (player) {
+            player.classList.remove('playing');
+            playBtn.classList.remove('playing');
+            setPlayerIcon('play');
+            if (hide) { player.hidden = true; chunks = []; }
+        }
+    }
+
+    /* Delegated wiring for any [data-tts-src] / [data-tts-text] button. */
+    document.addEventListener('click', function (e) {
+        var btn = e.target.closest('[data-tts-src],[data-tts-text]');
+        if (!btn) return;
+        e.preventDefault();
+        var text = btn.getAttribute('data-tts-text');
+        var sel = btn.getAttribute('data-tts-src');
+        if (!text && sel) {
+            var el = document.querySelector(sel);
+            text = el ? (el.innerText || el.textContent) : '';
+        }
+        if (text && text.trim()) speak(text.trim(), btn.getAttribute('data-tts-title') || 'SnapNotes Audio');
+    });
+
+    if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices;
+    window.addEventListener('beforeunload', function () { synth.cancel(); });
+
+    window.SnapNotesAudio = { speak: speak, stop: function () { stop(true); }, supported: true };
 })();
