@@ -7,7 +7,7 @@
 <div class="container-narrow">
     <div class="page-head rise">
         <h1>Upload Notes</h1>
-        <p>Upload a PDF or paste raw text — Studily's AI will build your study kit.</p>
+        <p>Upload a PDF or paste raw text — SnapNotes AI will build your study kit.</p>
     </div>
 
     <form class="card rise rise-1" method="post" action="<%= ctx %>/upload" enctype="multipart/form-data" id="upload-form">
@@ -20,7 +20,7 @@
         <div class="form-group">
             <label>Your Notes <span class="text-dim" style="font-weight:400">— upload queue: pick several PDFs at once</span></label>
             <div class="upload-zone" id="upload-zone">
-                <div class="zone-icon">📄</div>
+                <div class="zone-icon"><svg class="i"><use href="#i-file"/></svg></div>
                 <h3>Drag &amp; drop your PDFs here</h3>
                 <p id="file-label">or click to browse — multiple PDFs welcome, up to 10 MB each</p>
                 <input type="file" id="pdf-input" name="pdfFile" accept="application/pdf,.pdf" multiple hidden>
@@ -35,7 +35,7 @@
             <div class="hint">Provide a PDF or pasted text — at least one is required.</div>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-block" id="upload-btn">✨ Upload &amp; Generate Study Material</button>
+        <button type="submit" class="btn btn-primary btn-block" id="upload-btn"><svg class="i"><use href="#i-sparkles"/></svg> Upload &amp; Generate Study Material</button>
     </form>
 
     <div class="card mt-3 rise rise-2" id="ai-loader-card" style="display:none">
@@ -60,7 +60,7 @@
             var f = files[i];
             var row = document.createElement('div');
             row.className = 'queue-row';
-            row.innerHTML = '<span class="q-icon">📄</span><span class="q-name"></span>' +
+            row.innerHTML = '<span class="q-icon"><svg class="i i-sm"><use href="#i-file"/></svg></span><span class="q-name"></span>' +
                 '<span class="q-size text-dim">' + (f.size / 1048576).toFixed(1) + ' MB</span>';
             row.querySelector('.q-name').textContent = f.name;
             queueBox.appendChild(row);
