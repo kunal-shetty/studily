@@ -1,5 +1,5 @@
 -- =====================================================
--- Studily v2.1 Migration (Supabase PostgreSQL)
+-- SnapNotes v2.1 Migration (Supabase PostgreSQL)
 -- Settings, bookmarks, shares, subjects, leaderboard, badges
 -- Safe to re-run.
 -- =====================================================
