@@ -1,4 +1,4 @@
-# ================= Studily Configuration (template) =================
+# ================= SnapNotes Configuration (template) =================
 # Copy this file to src/main/resources/application.properties and fill in
 # your real values. The real file is gitignored so secrets stay local.
 #   cp src/main/resources/application.properties.example src/main/resources/application.properties
@@ -28,4 +28,4 @@ groq.timeout.seconds=45
 upload.max.size.bytes=10485760
 
 # ---- App ----
-app.name=Studily
+app.name=SnapNotes
