@@ -22,13 +22,13 @@
                 <p><%= mcqs.size() %> questions
                     · <span class="badge <%= "easy".equals(difficulty) ? "easy" : "hard".equals(difficulty) ? "hard" : "medium" %>"><%= difficulty %></span></p>
             </div>
-            <a class="btn btn-ghost btn-sm" href="<%= ctx %>/summary?noteId=<%= note.getNoteId() %>">← Exit Quiz</a>
+            <a class="btn btn-ghost btn-sm" href="<%= ctx %>/summary?noteId=<%= note.getNoteId() %>"><svg class="i i-sm"><use href="#i-chevron-left"/></svg> Exit Quiz</a>
         </div>
     </div>
 
     <form method="post" action="<%= ctx %>/quiz-submit" id="quiz-form">
         <div class="quiz-meta rise rise-1">
-            <span class="timer" id="quiz-timer" data-deadline="<%= deadline == null ? 0L : deadline %>">⏱ --:--</span>
+            <span class="timer" id="quiz-timer" data-deadline="<%= deadline == null ? 0L : deadline %>"><svg class="i i-sm"><use href="#i-clock"/></svg> --:--</span>
             <span class="badge badge-primary">Answer all questions — instant feedback at the end</span>
         </div>
 
