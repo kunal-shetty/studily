@@ -13,14 +13,14 @@
 %>
 <div class="container-narrow">
     <div class="page-head rise">
-        <h1>⚡ AI Study Session</h1>
+        <h1>AI Study Session</h1>
         <p>One click. The AI plans 20 focused minutes: summary → flashcards → quiz. Streak and XP update automatically.</p>
     </div>
 
     <% if (ready.isEmpty()) { %>
     <div class="card rise rise-1">
         <div class="empty-state">
-            <div class="empty-icon">🚀</div>
+            <div class="empty-icon"><svg class="i"><use href="#i-rocket"/></svg></div>
             <h3>Nothing to study yet</h3>
             <p>Upload a note and generate its study material — then a full AI-guided session unlocks here.</p>
             <a class="btn btn-primary mt-2" href="<%= ctx %>/upload">Upload your first note</a>
@@ -28,7 +28,7 @@
     </div>
     <% } else { %>
     <div class="card rise rise-1">
-        <div class="card-title"><span class="icon">🎯</span><h3>What do you want to study today?</h3></div>
+        <div class="card-title"><span class="icon"><svg class="i"><use href="#i-target"/></svg></span><h3>What do you want to study today?</h3></div>
         <% for (Note n : ready) { %>
         <form method="post" action="<%= ctx %>/session" class="list-row session-pick">
             <input type="hidden" name="noteId" value="<%= n.getNoteId() %>">
@@ -45,7 +45,7 @@
     </div>
 
     <div class="card rise rise-2 mt-3">
-        <div class="card-title"><span class="icon">🗺</span><h3>How a session runs</h3></div>
+        <div class="card-title"><span class="icon"><svg class="i"><use href="#i-map"/></svg></span><h3>How a session runs</h3></div>
         <div class="session-flow">
             <div class="flow-step"><span class="flow-num">1</span> AI builds your 20-minute plan</div>
             <div class="flow-step"><span class="flow-num">2</span> Skim the summary &amp; focus areas</div>
