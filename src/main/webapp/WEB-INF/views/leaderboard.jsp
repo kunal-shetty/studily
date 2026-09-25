@@ -9,14 +9,14 @@
 %>
 <div class="container-narrow">
     <div class="page-head rise">
-        <h1>🏆 Weekly Leaderboard</h1>
+        <h1>Weekly Leaderboard</h1>
         <p>XP earned since Monday — quizzes, reviews, and study sessions all count. Resets every week.</p>
     </div>
 
     <div class="card rise rise-1">
         <% if (board.isEmpty()) { %>
         <div class="empty-state" style="padding:30px">
-            <div class="empty-icon">⚡</div>
+            <div class="empty-icon"><svg class="i"><use href="#i-zap"/></svg></div>
             <h3>No XP earned yet this week</h3>
             <p>Finish a quiz or an AI Study Session to get on the board.</p>
             <a class="btn btn-primary mt-2" href="<%= ctx %>/session">Start a Study Session</a>
@@ -28,7 +28,7 @@
         <div class="list-row <%= ((Integer) row.get("userId")) == navUser.getUserId() ? "highlight" : "" %>">
             <div class="list-main">
                 <div class="list-title">
-                    <span class="rank-medal"><%= rank == 1 ? "🥇" : rank == 2 ? "🥈" : rank == 3 ? "🥉" : "#" + rank %></span>
+                    <span class="rank-medal <%= rank <= 3 ? "rank-" + rank : "" %>"><% if (rank <= 3) { %><svg class="i"><use href="#i-award"/></svg><% } else { %>#<%= rank %><% } %></span>
                     <%= row.get("name") %>
                 </div>
             </div>
