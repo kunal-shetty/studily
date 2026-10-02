@@ -7,11 +7,9 @@ import java.util.regex.Pattern;
  */
 public final class Validators {
 
-    private static final Pattern EMAIL =
-            Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
+    private static final Pattern EMAIL = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
 
-    private static final Pattern SAFE_TITLE =
-            Pattern.compile("^[\\p{L}\\p{N}][\\p{L}\\p{N} \\-_.:()']{1,199}$");
+    private static final Pattern SAFE_TITLE = Pattern.compile("^[\\p{L}\\p{N}][\\p{L}\\p{N} \\-_.:()']{1,199}$");
 
     private Validators() {
     }
@@ -51,7 +49,7 @@ public final class Validators {
             return null;
         }
         return text.replaceAll("[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F]", " ")
-                   .replaceAll("[ \\t]{3,}", "  ")
-                   .trim();
+                .replaceAll("[ \\t]{3,}", "  ")
+                .trim();
     }
 }
