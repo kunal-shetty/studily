@@ -39,7 +39,7 @@ public class FlashcardDAO {
     public List<Flashcard> findByNote(int noteId) throws SQLException {
         String sql = "SELECT id, note_id, question, answer FROM flashcards WHERE note_id = ? ORDER BY id";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, noteId);
             try (ResultSet rs = ps.executeQuery()) {
                 List<Flashcard> cards = new ArrayList<>();
@@ -59,10 +59,10 @@ public class FlashcardDAO {
     /** Edit a card's question/answer — ownership-scoped through the note. */
     public boolean updateCard(int userId, int cardId, String question, String answer) throws SQLException {
         String sql = "UPDATE flashcards SET question = ?, answer = ? "
-                   + "FROM notes WHERE flashcards.note_id = notes.note_id "
-                   + "AND flashcards.id = ? AND notes.user_id = ?";
+                + "FROM notes WHERE flashcards.note_id = notes.note_id "
+                + "AND flashcards.id = ? AND notes.user_id = ?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, question);
             ps.setString(2, answer);
             ps.setInt(3, cardId);
@@ -74,7 +74,7 @@ public class FlashcardDAO {
     public int countByNote(int noteId) throws SQLException {
         String sql = "SELECT COUNT(*) FROM flashcards WHERE note_id = ?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, noteId);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next() ? rs.getInt(1) : 0;
@@ -84,9 +84,9 @@ public class FlashcardDAO {
 
     public int countByUser(int userId) throws SQLException {
         String sql = "SELECT COUNT(*) FROM flashcards f "
-                   + "JOIN notes n ON f.note_id = n.note_id WHERE n.user_id = ?";
+                + "JOIN notes n ON f.note_id = n.note_id WHERE n.user_id = ?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, userId);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next() ? rs.getInt(1) : 0;
