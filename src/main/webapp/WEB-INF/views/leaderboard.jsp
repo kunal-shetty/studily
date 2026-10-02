@@ -4,8 +4,8 @@
 <%@ include file="partials/head.jsp" %>
 <%@ include file="partials/flash.jsp" %>
 <%
-    @SuppressWarnings("unchecked")
-    List<Map<String, Object>> board = (List<Map<String, Object>>) request.getAttribute("board");
+@SuppressWarnings("unchecked")
+List<Map<String, Object>> board = (List<Map<String, Object>>) request.getAttribute("board");
 %>
 <div class="container-narrow">
     <div class="page-head rise">
@@ -22,9 +22,9 @@
             <a class="btn btn-primary mt-2" href="<%= ctx %>/session">Start a Study Session</a>
         </div>
         <% } else { %>
-            <% for (Map<String, Object> row : board) {
-                   int rank = (Integer) row.get("rank");
-            %>
+        <% for (Map<String, Object> row : board) {
+        int rank = (Integer) row.get("rank");
+        %>
         <div class="list-row <%= ((Integer) row.get("userId")) == navUser.getUserId() ? "highlight" : "" %>">
             <div class="list-main">
                 <div class="list-title">
@@ -37,7 +37,7 @@
                 <span class="badge <%= (Integer) row.get("days") > 0 ? "" : "medium" %>"><%= row.get("days") %>d active</span>
             </div>
         </div>
-            <% } %>
+        <% } %>
         <% } %>
     </div>
 </div>
