@@ -18,7 +18,7 @@ import java.sql.SQLException;
  * Note actions: toggle bookmark, and edit a custom flashcard's
  * question/answer (AI cards become the student's own).
  */
-@WebServlet(name = "noteEditServlet", urlPatterns = {"/note-edit"})
+@WebServlet(name = "noteEditServlet", urlPatterns = { "/note-edit" })
 public class NoteEditServlet extends BaseAppServlet {
 
     private final NotesDAO notesDAO = new NotesDAO();
