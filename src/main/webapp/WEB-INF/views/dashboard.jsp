@@ -7,15 +7,20 @@
 <%@ include file="partials/head.jsp" %>
 <%@ include file="partials/flash.jsp" %>
 <%
-    DashboardStats stats = (DashboardStats) request.getAttribute("stats");
-    Integer dueCount = (Integer) request.getAttribute("dueCount");
-    DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMM d, yyyy");
-    DateTimeFormatter fmtTime = DateTimeFormatter.ofPattern("MMM d, HH:mm");
+DashboardStats stats = (DashboardStats) request.getAttribute("stats");
+Integer dueCount = (Integer) request.getAttribute("dueCount");
+DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMM d, yyyy");
+DateTimeFormatter fmtTime = DateTimeFormatter.ofPattern("MMM d, HH:mm");
 %>
 <div class="container">
     <div class="page-head rise">
+        <span class="eyebrow"><svg class="i i-sm"><use href="#i-sparkles"/></svg> YOUR STUDY SPACE</span>
         <h1>Welcome back, <%= navUser.getName() %></h1>
-        <p>Here's your study progress — every number below is live from your account.</p>
+        <p>Your learning at a glance. Pick up where you left off or start a focused session.</p>
+        <div class="dashboard-actions">
+            <a class="btn btn-primary" href="<%= ctx %>/session"><svg class="i"><use href="#i-zap"/></svg> Start a study session</a>
+            <a class="btn btn-secondary" href="<%= ctx %>/upload"><svg class="i"><use href="#i-upload"/></svg> Add notes</a>
+        </div>
     </div>
 
     <div class="stats-grid">
@@ -47,29 +52,38 @@
             <h3>Continue Studying</h3>
         </div>
         <%
-            List<Note> contNotes = stats.getRecentNotes();
+        List<Note> contNotes = stats.getRecentNotes();
             if (contNotes != null && !contNotes.isEmpty()) {
-                for (Note cn : contNotes) {
-                    boolean hasKit = cn.getSummaryJson() != null && !cn.getSummaryJson().isBlank();
-        %>
-        <div class="list-row">
-            <div class="list-main">
-                <div class="list-title"><%= cn.getTitle() %></div>
-                <div class="list-sub"><%= hasKit ? "Study kit ready" : "AI material pending" %></div>
+            for (Note cn : contNotes) {
+            boolean hasKit = cn.getSummaryJson() != null && !cn.getSummaryJson().isBlank();
+            %>
+            <div class="list-row">
+                <div class="list-main">
+                    <div class="list-title"><%= cn.getTitle() %></div>
+                    <div class="list-sub"><%= hasKit ? "Study kit ready" : "AI material pending" %></div>
+                </div>
+                <div class="list-actions">
+                    <% if (hasKit) { %>
+                    <a class="btn btn-secondary btn-sm" href="<%= ctx %>/flashcards?noteId=<%= cn.getNoteId() %>"><svg class="i i-sm"><use href="#i-cards"/></svg> Cards</a>
+                    <a class="btn btn-secondary btn-sm" href="<%= ctx %>/quiz?noteId=<%= cn.getNoteId() %>"><svg class="i i-sm"><use href="#i-help"/></svg> Quiz</a>
+                    <a class="btn btn-ghost btn-sm" href="<%= ctx %>/chat?noteId=<%= cn.getNoteId() %>"><svg class="i i-sm"><use href="#i-message"/></svg> Chat</a>
+                    <% } else { %>
+                    <a class="btn btn-primary btn-sm" href="<%= ctx %>/generate-notes?noteId=<%= cn.getNoteId() %>"><svg class="i i-sm"><use href="#i-sparkles"/></svg> Generate</a>
+                    <% } %>
+                </div>
             </div>
-            <div class="list-actions">
-                <% if (hasKit) { %>
-                <a class="btn btn-secondary btn-sm" href="<%= ctx %>/flashcards?noteId=<%= cn.getNoteId() %>"><svg class="i i-sm"><use href="#i-cards"/></svg> Cards</a>
-                <a class="btn btn-secondary btn-sm" href="<%= ctx %>/quiz?noteId=<%= cn.getNoteId() %>"><svg class="i i-sm"><use href="#i-help"/></svg> Quiz</a>
-                <a class="btn btn-ghost btn-sm" href="<%= ctx %>/chat?noteId=<%= cn.getNoteId() %>"><svg class="i i-sm"><use href="#i-message"/></svg> Chat</a>
-                <% } else { %>
-                <a class="btn btn-primary btn-sm" href="<%= ctx %>/generate-notes?noteId=<%= cn.getNoteId() %>"><svg class="i i-sm"><use href="#i-sparkles"/></svg> Generate</a>
-                <% } %>
+            <%      }
+            } else {
+            %>
+            <div class="empty-state dashboard-empty">
+                <div class="empty-icon"><svg class="i"><use href="#i-book"/></svg></div>
+                <h3>Your next study session starts here</h3>
+                <p>Upload lecture notes to create summaries, flashcards, and quizzes.</p>
+                <a class="btn btn-primary mt-2" href="<%= ctx %>/upload">Upload your first notes</a>
             </div>
-        </div>
-        <%      }
+            <%
             }
-        %>
+            %>
     </div>
 
     <div class="grid-2 mt-3">
@@ -79,29 +93,29 @@
                 <h3>Recent Uploads</h3>
             </div>
             <%
-                List<Note> notes = stats.getRecentNotes();
+            List<Note> notes = stats.getRecentNotes();
                 if (notes == null || notes.isEmpty()) {
-            %>
-            <div class="empty-state" style="padding: 26px">
-                <div class="empty-icon"><svg class="i"><use href="#i-inbox"/></svg></div>
-                <h3>No notes yet</h3>
-                <p>Upload your first PDF to generate study material.</p>
-                <a class="btn btn-primary mt-2" href="<%= ctx %>/upload">Upload Notes</a>
-            </div>
-            <% } else { %>
+                %>
+                <div class="empty-state" style="padding: 26px">
+                    <div class="empty-icon"><svg class="i"><use href="#i-inbox"/></svg></div>
+                    <h3>No notes yet</h3>
+                    <p>Upload your first PDF to generate study material.</p>
+                    <a class="btn btn-primary mt-2" href="<%= ctx %>/upload">Upload Notes</a>
+                </div>
+                <% } else { %>
                 <% for (Note n : notes) { %>
-            <div class="list-row">
-                <div class="list-main">
-                    <div class="list-title"><%= n.getTitle() %></div>
-                    <div class="list-sub"><%= n.getCreatedAt() == null ? "" : n.getCreatedAt().format(fmt) %></div>
+                <div class="list-row">
+                    <div class="list-main">
+                        <div class="list-title"><%= n.getTitle() %></div>
+                        <div class="list-sub"><%= n.getCreatedAt() == null ? "" : n.getCreatedAt().format(fmt) %></div>
+                    </div>
+                    <div class="list-actions">
+                        <a class="btn btn-secondary btn-sm" href="<%= ctx %>/summary?noteId=<%= n.getNoteId() %>">Open</a>
+                    </div>
                 </div>
-                <div class="list-actions">
-                    <a class="btn btn-secondary btn-sm" href="<%= ctx %>/summary?noteId=<%= n.getNoteId() %>">Open</a>
-                </div>
-            </div>
-            <% } %>
-            <a class="btn btn-ghost btn-sm mt-2" href="<%= ctx %>/history">View all →</a>
-            <% } %>
+                <% } %>
+                <a class="btn btn-ghost btn-sm mt-2" href="<%= ctx %>/history">View all →</a>
+                <% } %>
         </div>
 
         <div class="card rise rise-3">
@@ -110,28 +124,28 @@
                 <h3>Recent Quizzes</h3>
             </div>
             <%
-                List<QuizResult> quizzes = stats.getRecentQuizzes();
+            List<QuizResult> quizzes = stats.getRecentQuizzes();
                 if (quizzes == null || quizzes.isEmpty()) {
-            %>
-            <div class="empty-state" style="padding: 26px">
-                <div class="empty-icon"><svg class="i"><use href="#i-cpu"/></svg></div>
-                <h3>No quizzes yet</h3>
-                <p>Test yourself with AI-generated MCQs from your notes.</p>
-            </div>
-            <% } else { %>
+                %>
+                <div class="empty-state" style="padding: 26px">
+                    <div class="empty-icon"><svg class="i"><use href="#i-cpu"/></svg></div>
+                    <h3>No quizzes yet</h3>
+                    <p>Test yourself with AI-generated MCQs from your notes.</p>
+                </div>
+                <% } else { %>
                 <% for (QuizResult q : quizzes) { %>
-            <div class="list-row">
-                <div class="list-main">
-                    <div class="list-title"><%= q.getNoteTitle() %></div>
-                    <div class="list-sub"><%= q.getAttemptDate() == null ? "" : q.getAttemptDate().format(fmtTime) %></div>
+                <div class="list-row">
+                    <div class="list-main">
+                        <div class="list-title"><%= q.getNoteTitle() %></div>
+                        <div class="list-sub"><%= q.getAttemptDate() == null ? "" : q.getAttemptDate().format(fmtTime) %></div>
+                    </div>
+                    <div class="list-actions">
+                        <span class="badge <%= q.getPercentage() >= 70 ? "" : "medium" %>"><%= q.getScore() %>/<%= q.getTotalQuestions() %></span>
+                    </div>
                 </div>
-                <div class="list-actions">
-                    <span class="badge <%= q.getPercentage() >= 70 ? "" : "medium" %>"><%= q.getScore() %>/<%= q.getTotalQuestions() %></span>
-                </div>
-            </div>
-            <% } %>
-            <a class="btn btn-ghost btn-sm mt-2" href="<%= ctx %>/history">View all →</a>
-            <% } %>
+                <% } %>
+                <a class="btn btn-ghost btn-sm mt-2" href="<%= ctx %>/history">View all →</a>
+                <% } %>
         </div>
     </div>
 
