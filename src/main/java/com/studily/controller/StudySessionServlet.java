@@ -30,7 +30,7 @@ import java.util.List;
  * plan, then the session view funnels the student through focus areas,
  * flashcards, and a 10-question quiz. Completing the session awards XP.
  */
-@WebServlet(name = "studySessionServlet", urlPatterns = {"/session"})
+@WebServlet(name = "studySessionServlet", urlPatterns = { "/session" })
 public class StudySessionServlet extends BaseAppServlet {
 
     private final NotesDAO notesDAO = new NotesDAO();
@@ -98,8 +98,8 @@ public class StudySessionServlet extends BaseAppServlet {
         } catch (AIService.AIServiceException e) {
             Log.warning("Session plan fallback (note " + noteId + "): " + e.getMessage());
             planJson = "{\"intro\":\"A focused 20-minute pass through this material.\","
-                     + "\"focus\":[\"Read the summary\",\"Review every flashcard\",\"Take the quiz\"],"
-                     + "\"tip\":\"Say each answer out loud before flipping the card.\"}";
+                    + "\"focus\":[\"Read the summary\",\"Review every flashcard\",\"Take the quiz\"],"
+                    + "\"tip\":\"Say each answer out loud before flipping the card.\"}";
         }
 
         // Trim the quiz to 10 questions for the session window.
