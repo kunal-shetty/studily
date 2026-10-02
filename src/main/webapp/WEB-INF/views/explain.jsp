@@ -4,10 +4,10 @@
 <%@ include file="partials/head.jsp" %>
 <%@ include file="partials/flash.jsp" %>
 <%
-    Note note = (Note) request.getAttribute("note");
-    MCQ mcq = (MCQ) request.getAttribute("explainedMcq");
-    String explanation = (String) request.getAttribute("personalExplanation");
-    String chosen = (String) request.getAttribute("chosenLetter");
+Note note = (Note) request.getAttribute("note");
+MCQ mcq = (MCQ) request.getAttribute("explainedMcq");
+String explanation = (String) request.getAttribute("personalExplanation");
+String chosen = (String) request.getAttribute("chosenLetter");
 %>
 <div class="container-narrow">
     <div class="page-head rise">
