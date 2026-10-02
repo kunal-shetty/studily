@@ -21,7 +21,7 @@ import java.util.List;
  * Raycast-style global search (Ctrl+K). Returns JSON for the search modal:
  * notes, flashcards, and MCQs matching a query — all ownership-scoped.
  */
-@WebServlet(name = "searchServlet", urlPatterns = {"/search"})
+@WebServlet(name = "searchServlet", urlPatterns = { "/search" })
 public class SearchServlet extends BaseAppServlet {
 
     private final NotesDAO notesDAO = new NotesDAO();
@@ -57,9 +57,11 @@ public class SearchServlet extends BaseAppServlet {
 
                 // Flashcards (question match) — limited scan of recent notes' cards
                 for (var n : notesDAO.findRecentByUser(user.getUserId(), 20)) {
-                    if (results.size() >= 12) break;
+                    if (results.size() >= 12)
+                        break;
                     for (var c : flashcardDAO.findByNote(n.getNoteId())) {
-                        if (results.size() >= 12) break;
+                        if (results.size() >= 12)
+                            break;
                         if (c.getQuestion() != null && c.getQuestion().toLowerCase().contains(term)) {
                             JsonObject o = new JsonObject();
                             o.addProperty("type", "flashcard");
@@ -73,9 +75,11 @@ public class SearchServlet extends BaseAppServlet {
 
                 // MCQs (question match)
                 for (var n : notesDAO.findRecentByUser(user.getUserId(), 20)) {
-                    if (results.size() >= 15) break;
+                    if (results.size() >= 15)
+                        break;
                     for (var m : mcqDAO.findByNote(n.getNoteId(), null)) {
-                        if (results.size() >= 15) break;
+                        if (results.size() >= 15)
+                            break;
                         if (m.getQuestion() != null && m.getQuestion().toLowerCase().contains(term)) {
                             JsonObject o = new JsonObject();
                             o.addProperty("type", "quiz");
@@ -97,6 +101,6 @@ public class SearchServlet extends BaseAppServlet {
     }
 
     private String clip(String s, int max) {
-        return s == null ? "" : (s.length() <= max ? s : s.substring(0, max)) ;
+        return s == null ? "" : (s.length() <= max ? s : s.substring(0, max));
     }
 }
