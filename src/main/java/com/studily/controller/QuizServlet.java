@@ -22,7 +22,7 @@ import java.util.List;
  * Quiz mode. Stores quiz state in the session: the question ids in play,
  * the user's chosen answers, and the deadline for the timer.
  */
-@WebServlet(name = "quizServlet", urlPatterns = {"/quiz"})
+@WebServlet(name = "quizServlet", urlPatterns = { "/quiz" })
 public class QuizServlet extends BaseAppServlet {
 
     private final NotesDAO notesDAO = new NotesDAO();
@@ -73,7 +73,8 @@ public class QuizServlet extends BaseAppServlet {
         // --- Initialize session quiz state ---
         HttpSession session = request.getSession();
         List<Integer> ids = new ArrayList<>();
-        for (MCQ m : mcqs) ids.add(m.getId());
+        for (MCQ m : mcqs)
+            ids.add(m.getId());
         session.setAttribute("quiz.noteId", noteId);
         session.setAttribute("quiz.ids", ids);
         session.setAttribute("quiz.difficulty", difficulty == null ? "all" : difficulty);
