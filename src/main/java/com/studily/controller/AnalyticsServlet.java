@@ -27,7 +27,7 @@ import java.util.*;
 /**
  * Analytics: study heatmap, quiz accuracy trend, and AI weak-topic detection.
  */
-@WebServlet(name = "analyticsServlet", urlPatterns = {"/analytics"})
+@WebServlet(name = "analyticsServlet", urlPatterns = { "/analytics" })
 public class AnalyticsServlet extends BaseAppServlet {
 
     private final QuizDAO quizDAO = new QuizDAO();
@@ -43,7 +43,8 @@ public class AnalyticsServlet extends BaseAppServlet {
 
         try {
             Map<String, Integer> heat = new LinkedHashMap<>();
-            for (int i = 119; i >= 0; i--) heat.put(LocalDate.now().minusDays(i).toString(), 0);
+            for (int i = 119; i >= 0; i--)
+                heat.put(LocalDate.now().minusDays(i).toString(), 0);
             quizDAO.attemptActivity(user.getUserId(), 120)
                     .forEach((k, v) -> heat.merge(k, v, Integer::sum));
             reviewDAO.reviewActivity(user.getUserId(), 120)
@@ -61,22 +62,22 @@ public class AnalyticsServlet extends BaseAppServlet {
         // --- AI weak-topic detection (fail-soft: analytics page still renders) ---
         try {
             List<QuizAnswer> wrong = quizAnswerDAO.findRecentWrong(user.getUserId(), 25);
-                if (wrong.isEmpty()) {
-                    data.setWeakTopics(List.of());
-                } else {
-                    StringBuilder digest = new StringBuilder();
-                    for (QuizAnswer a : wrong) {
-                        digest.append(clip(a.getNoteQuestion(), 200)).append(" | chose ")
-                              .append(a.getChosenAnswer() == null ? "nothing" : a.getChosenAnswer())
-                              .append("\n");
-                    }
-                    String raw = AIService.detectWeakTopics(digest.toString());
-                    data.setWeakTopics(parseWeakTopics(raw));
-                }
-            } catch (AIService.AIServiceException | SQLException e) {
-                Log.warning("Weak-topic detection unavailable: " + e.getMessage());
+            if (wrong.isEmpty()) {
                 data.setWeakTopics(List.of());
+            } else {
+                StringBuilder digest = new StringBuilder();
+                for (QuizAnswer a : wrong) {
+                    digest.append(clip(a.getNoteQuestion(), 200)).append(" | chose ")
+                            .append(a.getChosenAnswer() == null ? "nothing" : a.getChosenAnswer())
+                            .append("\n");
+                }
+                String raw = AIService.detectWeakTopics(digest.toString());
+                data.setWeakTopics(parseWeakTopics(raw));
             }
+        } catch (AIService.AIServiceException | SQLException e) {
+            Log.warning("Weak-topic detection unavailable: " + e.getMessage());
+            data.setWeakTopics(List.of());
+        }
 
         request.setAttribute("analytics", data);
         request.setAttribute("navActive", "analytics");
@@ -89,7 +90,8 @@ public class AnalyticsServlet extends BaseAppServlet {
             String json = raw.trim();
             int start = json.indexOf('[');
             int end = json.lastIndexOf(']');
-            if (start >= 0 && end > start) json = json.substring(start, end + 1);
+            if (start >= 0 && end > start)
+                json = json.substring(start, end + 1);
             JsonArray arr = JsonParser.parseString(json).getAsJsonArray();
             for (JsonElement el : arr) {
                 JsonObject o = el.getAsJsonObject();
@@ -97,9 +99,11 @@ public class AnalyticsServlet extends BaseAppServlet {
                 t.setTopic(o.has("topic") ? o.get("topic").getAsString() : "Unknown topic");
                 t.setReason(o.has("reason") ? o.get("reason").getAsString() : "");
                 t.setNoteId(o.has("noteId") && o.get("noteId").isJsonPrimitive()
-                        ? o.get("noteId").getAsInt() : 0);
+                        ? o.get("noteId").getAsInt()
+                        : 0);
                 out.add(t);
-                if (out.size() >= 4) break;
+                if (out.size() >= 4)
+                    break;
             }
         } catch (Exception e) {
             Log.warning("Weak-topic parse failed: " + e.getMessage());
