@@ -20,7 +20,7 @@ import java.sql.SQLException;
  * "Explain my mistake" — AI analyzes why THIS student fell for the option
  * they chose. POST-only (costs an API call).
  */
-@WebServlet(name = "explainServlet", urlPatterns = {"/explain"})
+@WebServlet(name = "explainServlet", urlPatterns = { "/explain" })
 public class ExplainServlet extends BaseAppServlet {
 
     private final NotesDAO notesDAO = new NotesDAO();
