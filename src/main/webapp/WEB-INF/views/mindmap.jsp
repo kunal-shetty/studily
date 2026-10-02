@@ -3,8 +3,8 @@
 <%@ include file="partials/head.jsp" %>
 <%@ include file="partials/flash.jsp" %>
 <%
-    Note note = (Note) request.getAttribute("note");
-    String mindmapJson = (String) request.getAttribute("mindmapJson");
+Note note = (Note) request.getAttribute("note");
+String mindmapJson = (String) request.getAttribute("mindmapJson");
 %>
 <div class="container-narrow">
     <div class="page-head rise">
