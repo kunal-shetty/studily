@@ -28,7 +28,7 @@ import java.util.Map;
  * Grades the session quiz, stores the attempt, and shows results with
  * instant feedback and AI explanations.
  */
-@WebServlet(name = "quizSubmitServlet", urlPatterns = {"/quiz-submit"})
+@WebServlet(name = "quizSubmitServlet", urlPatterns = { "/quiz-submit" })
 public class QuizSubmitServlet extends BaseAppServlet {
 
     private final NotesDAO notesDAO = new NotesDAO();
@@ -90,7 +90,8 @@ public class QuizSubmitServlet extends BaseAppServlet {
 
         int score = 0;
         for (MCQ m : mcqs) {
-            if (m.isCorrect(chosen.get(m.getId()))) score++;
+            if (m.isCorrect(chosen.get(m.getId())))
+                score++;
         }
 
         // --- Persist attempt + per-question answers ---
@@ -116,7 +117,8 @@ public class QuizSubmitServlet extends BaseAppServlet {
         // --- Gamification: XP + badges (never blocks the result page) ---
         try {
             int xp = 10 + score * 4;
-            if (Boolean.TRUE.equals(session.getAttribute("studySession"))) xp += 20;
+            if (Boolean.TRUE.equals(session.getAttribute("studySession")))
+                xp += 20;
             engagementDAO.awardXp(user.getUserId(), xp, "quiz");
             double pct = mcqs.isEmpty() ? 0 : (score * 100.0 / mcqs.size());
             int notes = notesDAO.countByUser(user.getUserId());
