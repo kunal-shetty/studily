@@ -19,7 +19,8 @@ public final class PDFService {
     /**
      * Extract text from a PDF file on disk.
      *
-     * @throws IOException if the file is corrupt, encrypted, or unreadable
+     * @throws IOException              if the file is corrupt, encrypted, or
+     *                                  unreadable
      * @throws IllegalArgumentException if the PDF contains no extractable text
      */
     public static String extractText(File pdfFile) throws IOException {
