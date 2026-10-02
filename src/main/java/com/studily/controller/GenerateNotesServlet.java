@@ -23,7 +23,7 @@ import java.util.List;
  * AI generation pipeline: load note -> call Groq -> parse JSON -> persist
  * summary + flashcards + MCQs -> redirect to the summary page.
  */
-@WebServlet(name = "generateNotesServlet", urlPatterns = {"/generate-notes"})
+@WebServlet(name = "generateNotesServlet", urlPatterns = { "/generate-notes" })
 public class GenerateNotesServlet extends BaseAppServlet {
 
     private final NotesDAO notesDAO = new NotesDAO();
@@ -99,13 +99,15 @@ public class GenerateNotesServlet extends BaseAppServlet {
 
             List<Flashcard> cards = new ArrayList<>();
             for (StudyKit.FlashcardItem item : payload.getFlashcards()) {
-                if (item.getQuestion() == null || item.getAnswer() == null) continue;
+                if (item.getQuestion() == null || item.getAnswer() == null)
+                    continue;
                 cards.add(new Flashcard(item.getQuestion(), item.getAnswer()));
             }
 
             List<MCQ> mcqs = new ArrayList<>();
             for (StudyKit.MCQItem item : payload.getMcqs()) {
-                if (item.getQuestion() == null || item.getCorrectAnswer() == null) continue;
+                if (item.getQuestion() == null || item.getCorrectAnswer() == null)
+                    continue;
                 MCQ m = new MCQ();
                 m.setNoteId(noteId);
                 m.setQuestion(item.getQuestion());
