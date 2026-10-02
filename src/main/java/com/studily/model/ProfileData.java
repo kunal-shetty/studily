@@ -20,34 +20,73 @@ public class ProfileData {
     private int weeklyRank;
 
     public static Map<String, String[]> BADGE_META = Map.of(
-            "streak_7", new String[]{ "flame", "7-Day Streak", "Studied 7 days in a row" },
-            "flashcards_100", new String[]{ "cards", "Century Cards", "100 flashcards generated" },
-            "accuracy_90", new String[]{ "target", "Sharpshooter", "90%+ average quiz accuracy" },
-            "notes_10", new String[]{ "folder", "Librarian", "10 notes uploaded" },
-            "first_quiz", new String[]{ "check-circle", "First Quiz", "Completed your first quiz" }
-    );
+            "streak_7", new String[] { "flame", "7-Day Streak", "Studied 7 days in a row" },
+            "flashcards_100", new String[] { "cards", "Century Cards", "100 flashcards generated" },
+            "accuracy_90", new String[] { "target", "Sharpshooter", "90%+ average quiz accuracy" },
+            "notes_10", new String[] { "folder", "Librarian", "10 notes uploaded" },
+            "first_quiz", new String[] { "check-circle", "First Quiz", "Completed your first quiz" });
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getName() {
+        return name;
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public LocalDateTime getMemberSince() { return memberSince; }
-    public void setMemberSince(LocalDateTime memberSince) { this.memberSince = memberSince; }
+    public String getEmail() {
+        return email;
+    }
 
-    public DashboardStats getStats() { return stats; }
-    public void setStats(DashboardStats stats) { this.stats = stats; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-    public Set<String> getBadges() { return badges; }
-    public void setBadges(Set<String> badges) { this.badges = badges; }
+    public LocalDateTime getMemberSince() {
+        return memberSince;
+    }
 
-    public List<Map<String, Object>> getLeaderboard() { return leaderboard; }
-    public void setLeaderboard(List<Map<String, Object>> leaderboard) { this.leaderboard = leaderboard; }
+    public void setMemberSince(LocalDateTime memberSince) {
+        this.memberSince = memberSince;
+    }
 
-    public int getWeeklyXp() { return weeklyXp; }
-    public void setWeeklyXp(int weeklyXp) { this.weeklyXp = weeklyXp; }
+    public DashboardStats getStats() {
+        return stats;
+    }
 
-    public int getWeeklyRank() { return weeklyRank; }
-    public void setWeeklyRank(int weeklyRank) { this.weeklyRank = weeklyRank; }
+    public void setStats(DashboardStats stats) {
+        this.stats = stats;
+    }
+
+    public Set<String> getBadges() {
+        return badges;
+    }
+
+    public void setBadges(Set<String> badges) {
+        this.badges = badges;
+    }
+
+    public List<Map<String, Object>> getLeaderboard() {
+        return leaderboard;
+    }
+
+    public void setLeaderboard(List<Map<String, Object>> leaderboard) {
+        this.leaderboard = leaderboard;
+    }
+
+    public int getWeeklyXp() {
+        return weeklyXp;
+    }
+
+    public void setWeeklyXp(int weeklyXp) {
+        this.weeklyXp = weeklyXp;
+    }
+
+    public int getWeeklyRank() {
+        return weeklyRank;
+    }
+
+    public void setWeeklyRank(int weeklyRank) {
+        this.weeklyRank = weeklyRank;
+    }
 }
