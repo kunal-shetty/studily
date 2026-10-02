@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * NotebookLM-style AI chat bound to one note. History persists in MySQL.
  */
-@WebServlet(name = "chatServlet", urlPatterns = {"/chat"})
+@WebServlet(name = "chatServlet", urlPatterns = { "/chat" })
 public class ChatServlet extends BaseAppServlet {
 
     private final NotesDAO notesDAO = new NotesDAO();
@@ -74,7 +74,8 @@ public class ChatServlet extends BaseAppServlet {
             redirect(request, response, "/chat?noteId=" + (noteId == null ? "" : noteId));
             return;
         }
-        if (question.length() > 1200) question = question.substring(0, 1200);
+        if (question.length() > 1200)
+            question = question.substring(0, 1200);
 
         Note note;
         try {
@@ -94,7 +95,8 @@ public class ChatServlet extends BaseAppServlet {
         try {
             List<ChatMessage> past = chatDAO.findByNote(user.getUserId(), noteId, 20);
             List<String[]> history = new ArrayList<>();
-            for (ChatMessage m : past) history.add(new String[]{m.getRole(), m.getContent()});
+            for (ChatMessage m : past)
+                history.add(new String[] { m.getRole(), m.getContent() });
 
             chatDAO.insert(user.getUserId(), noteId, "user", question);
 
