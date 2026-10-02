@@ -19,7 +19,7 @@ import java.util.Map;
  * Share notes: owner POSTs to mint a view-only link; anyone with the link
  * gets a read-only summary page (token is the credential).
  */
-@WebServlet(name = "shareServlet", urlPatterns = {"/share", "/s/*"})
+@WebServlet(name = "shareServlet", urlPatterns = { "/share", "/s/*" })
 public class ShareServlet extends BaseAppServlet {
 
     private final ShareDAO shareDAO = new ShareDAO();
