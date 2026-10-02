@@ -16,7 +16,7 @@ public class QuizDAO {
     public int insert(int userId, int noteId, int score, int totalQuestions) throws SQLException {
         String sql = "INSERT INTO quiz_results (user_id, note_id, score, total_questions) VALUES (?, ?, ?, ?)";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql, new String[] { "id" })) {
+                PreparedStatement ps = con.prepareStatement(sql, new String[] { "id" })) {
             ps.setInt(1, userId);
             ps.setInt(2, noteId);
             ps.setInt(3, score);
@@ -30,15 +30,16 @@ public class QuizDAO {
 
     public List<QuizResult> findRecentByUser(int userId, int limit) throws SQLException {
         String sql = "SELECT qr.id, qr.user_id, qr.note_id, qr.score, qr.total_questions, qr.attempt_date, n.title "
-                   + "FROM quiz_results qr JOIN notes n ON qr.note_id = n.note_id "
-                   + "WHERE qr.user_id = ? ORDER BY qr.attempt_date DESC LIMIT ?";
+                + "FROM quiz_results qr JOIN notes n ON qr.note_id = n.note_id "
+                + "WHERE qr.user_id = ? ORDER BY qr.attempt_date DESC LIMIT ?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, userId);
             ps.setInt(2, limit);
             try (ResultSet rs = ps.executeQuery()) {
                 List<QuizResult> results = new ArrayList<>();
-                while (rs.next()) results.add(mapRow(rs));
+                while (rs.next())
+                    results.add(mapRow(rs));
                 return results;
             }
         }
@@ -47,7 +48,7 @@ public class QuizDAO {
     public int countByUser(int userId) throws SQLException {
         String sql = "SELECT COUNT(*) FROM quiz_results WHERE user_id = ?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, userId);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next() ? rs.getInt(1) : 0;
@@ -58,9 +59,9 @@ public class QuizDAO {
     /** Average score as a percentage across all attempts. */
     public double averageScorePercent(int userId) throws SQLException {
         String sql = "SELECT COALESCE(SUM(score) * 100.0 / NULLIF(SUM(total_questions), 0), 0) "
-                   + "FROM quiz_results WHERE user_id = ?";
+                + "FROM quiz_results WHERE user_id = ?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, userId);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next() ? rs.getDouble(1) : 0.0;
@@ -75,17 +76,18 @@ public class QuizDAO {
      */
     public int studyStreak(int userId) throws SQLException {
         String sql = "SELECT DISTINCT CAST(attempt_date AS date) FROM quiz_results WHERE user_id = ? "
-                   + "UNION "
-                   + "SELECT DISTINCT CAST(created_at AS date) FROM notes WHERE user_id = ?";
+                + "UNION "
+                + "SELECT DISTINCT CAST(created_at AS date) FROM notes WHERE user_id = ?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, userId);
             ps.setInt(2, userId);
             try (ResultSet rs = ps.executeQuery()) {
                 java.util.Set<java.time.LocalDate> days = new java.util.HashSet<>();
                 while (rs.next()) {
                     java.sql.Date d = rs.getDate(1);
-                    if (d != null) days.add(d.toLocalDate());
+                    if (d != null)
+                        days.add(d.toLocalDate());
                 }
                 return computeStreak(days);
             }
@@ -93,33 +95,36 @@ public class QuizDAO {
     }
 
     static int computeStreak(java.util.Set<java.time.LocalDate> days) {
-        if (days.isEmpty()) return 0;
+        if (days.isEmpty())
+            return 0;
         java.time.LocalDate today = java.time.LocalDate.now();
         java.time.LocalDate cursor = days.contains(today) ? today
                 : days.contains(today.minusDays(1)) ? today.minusDays(1) : null;
-        if (cursor == null) return 0;
+        if (cursor == null)
+            return 0;
         int streak = 0;
         while (days.contains(cursor)) {
             streak++;
             cursor = cursor.minusDays(1);
-    }
+        }
         return streak;
     }
 
     /** Daily quiz-attempt counts for the heatmap (last N days). */
     public Map<String, Integer> attemptActivity(int userId, int days) throws SQLException {
         String sql = "SELECT CAST(attempt_date AS date) d, COUNT(*) c FROM quiz_results "
-                   + "WHERE user_id = ? AND attempt_date >= NOW() - CAST(? AS INT) * INTERVAL '1 day' "
-                   + "GROUP BY 1";
+                + "WHERE user_id = ? AND attempt_date >= NOW() - CAST(? AS INT) * INTERVAL '1 day' "
+                + "GROUP BY 1";
         Map<String, Integer> out = new java.util.LinkedHashMap<>();
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, userId);
             ps.setInt(2, days);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Date d = rs.getDate(1);
-                    if (d != null) out.put(d.toLocalDate().toString(), rs.getInt(2));
+                    if (d != null)
+                        out.put(d.toLocalDate().toString(), rs.getInt(2));
                 }
             }
         }
@@ -129,15 +134,16 @@ public class QuizDAO {
     /** Chronological quiz attempts with percentage for trend charts. */
     public List<QuizResult> findTrendByUser(int userId, int limit) throws SQLException {
         String sql = "SELECT qr.id, qr.user_id, qr.note_id, qr.score, qr.total_questions, qr.attempt_date, n.title "
-                   + "FROM quiz_results qr JOIN notes n ON qr.note_id = n.note_id "
-                   + "WHERE qr.user_id = ? ORDER BY qr.attempt_date ASC LIMIT ?";
+                + "FROM quiz_results qr JOIN notes n ON qr.note_id = n.note_id "
+                + "WHERE qr.user_id = ? ORDER BY qr.attempt_date ASC LIMIT ?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, userId);
             ps.setInt(2, limit);
             try (ResultSet rs = ps.executeQuery()) {
                 List<QuizResult> results = new ArrayList<>();
-                while (rs.next()) results.add(mapRow(rs));
+                while (rs.next())
+                    results.add(mapRow(rs));
                 return results;
             }
         }
