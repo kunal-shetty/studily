@@ -6,8 +6,8 @@
 <%@ include file="partials/head.jsp" %>
 <%@ include file="partials/flash.jsp" %>
 <%
-    AnalyticsData analytics = (AnalyticsData) request.getAttribute("analytics");
-    DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMM d");
+AnalyticsData analytics = (AnalyticsData) request.getAttribute("analytics");
+DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMM d");
 %>
 <div class="container">
     <div class="page-head rise">
@@ -29,7 +29,7 @@
         <div class="stat-card rise rise-3">
             <span class="stat-icon"><svg class="i"><use href="#i-target"/></svg></span>
             <div class="stat-value"><%= analytics.getQuizTrend().isEmpty() ? "—" :
-                    String.format("%.0f", analytics.getQuizTrend().get(analytics.getQuizTrend().size() - 1).getPercentage()) %>%</div>
+                String.format("%.0f", analytics.getQuizTrend().get(analytics.getQuizTrend().size() - 1).getPercentage()) %>%</div>
             <div class="stat-label">Latest quiz accuracy</div>
         </div>
     </div>
@@ -74,7 +74,7 @@
                 <p>Take more quizzes — the AI flags topics from wrong answers.</p>
             </div>
             <% } else { %>
-                <% for (AnalyticsData.WeakTopic t : analytics.getWeakTopics()) { %>
+            <% for (AnalyticsData.WeakTopic t : analytics.getWeakTopics()) { %>
             <div class="weak-topic">
                 <svg class="i"><use href="#i-alert"/></svg>
                 <div>
@@ -82,7 +82,7 @@
                     <div class="wt-reason"><%= t.getReason() %></div>
                 </div>
             </div>
-                <% } %>
+            <% } %>
             <% } %>
         </div>
     </div>
