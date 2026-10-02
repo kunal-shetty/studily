@@ -14,23 +14,49 @@ public class QuizDetail {
     private int totalQuestions;
     private int timeLimitSeconds;
 
-    public Note getNote() { return note; }
-    public void setNote(Note note) { this.note = note; }
+    public Note getNote() {
+        return note;
+    }
 
-    public List<MCQ> getMcqs() { return mcqs; }
-    public void setMcqs(List<MCQ> mcqs) { this.mcqs = mcqs; }
+    public void setNote(Note note) {
+        this.note = note;
+    }
 
-    public int getCurrentQuestionIndex() { return currentQuestionIndex; }
-    public void setCurrentQuestionIndex(int currentQuestionIndex) { this.currentQuestionIndex = currentQuestionIndex; }
+    public List<MCQ> getMcqs() {
+        return mcqs;
+    }
 
-    public int getTotalQuestions() { return totalQuestions; }
-    public void setTotalQuestions(int totalQuestions) { this.totalQuestions = totalQuestions; }
+    public void setMcqs(List<MCQ> mcqs) {
+        this.mcqs = mcqs;
+    }
 
-    public int getTimeLimitSeconds() { return timeLimitSeconds; }
-    public void setTimeLimitSeconds(int timeLimitSeconds) { this.timeLimitSeconds = timeLimitSeconds; }
+    public int getCurrentQuestionIndex() {
+        return currentQuestionIndex;
+    }
+
+    public void setCurrentQuestionIndex(int currentQuestionIndex) {
+        this.currentQuestionIndex = currentQuestionIndex;
+    }
+
+    public int getTotalQuestions() {
+        return totalQuestions;
+    }
+
+    public void setTotalQuestions(int totalQuestions) {
+        this.totalQuestions = totalQuestions;
+    }
+
+    public int getTimeLimitSeconds() {
+        return timeLimitSeconds;
+    }
+
+    public void setTimeLimitSeconds(int timeLimitSeconds) {
+        this.timeLimitSeconds = timeLimitSeconds;
+    }
 
     public MCQ getCurrentMcq() {
-        if (mcqs == null || mcqs.isEmpty()) return null;
+        if (mcqs == null || mcqs.isEmpty())
+            return null;
         int idx = Math.min(currentQuestionIndex, mcqs.size() - 1);
         return mcqs.get(idx);
     }
