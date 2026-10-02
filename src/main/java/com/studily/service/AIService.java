@@ -62,7 +62,8 @@ public final class AIService {
     /**
      * Calls Groq and returns the parsed structured payload.
      *
-     * @throws AIServiceException on invalid key, rate limit, timeout, or malformed JSON
+     * @throws AIServiceException on invalid key, rate limit, timeout, or malformed
+     *                            JSON
      */
     public static StudyKit.AIPayload generateStudyKit(String noteText) throws AIServiceException {
         String userPrompt = buildUserPrompt(noteText);
@@ -125,7 +126,7 @@ public final class AIService {
 
         JsonObject root = JsonParser.parseString(response.body()).getAsJsonObject();
         return root.getAsJsonArray("choices").get(0).getAsJsonObject()
-                   .getAsJsonObject("message").get("content").getAsString();
+                .getAsJsonObject("message").get("content").getAsString();
     }
 
     private static JsonObject createJsonMode() {
@@ -202,7 +203,7 @@ public final class AIService {
      * history alternates user/assistant turns (already oldest-first).
      */
     public static String chat(int userId, String noteTitle, String noteText,
-                              List<String[]> history, String question) throws AIServiceException {
+            List<String[]> history, String question) throws AIServiceException {
         String system = """
                 You are Studily, an AI study tutor answering questions about a student's uploaded notes.
                 Note title: "%s"
@@ -218,7 +219,7 @@ public final class AIService {
         StringBuilder convo = new StringBuilder();
         for (String[] turn : history) {
             convo.append(turn[0].equals("user") ? "Student: " : "Tutor: ")
-                 .append(clip(turn[1], 700)).append("\n");
+                    .append(clip(turn[1], 700)).append("\n");
         }
         convo.append("Student: ").append(clip(question, 1200));
 
@@ -227,7 +228,8 @@ public final class AIService {
 
     /**
      * Generates a hierarchical mind map of the note.
-     * Returns raw JSON: { "label": "...", "children": [ { "label": "...", "children": [] } ] }
+     * Returns raw JSON: { "label": "...", "children": [ { "label": "...",
+     * "children": [] } ] }
      */
     public static String generateMindMap(String noteText) throws AIServiceException {
         String system = """
@@ -237,7 +239,8 @@ public final class AIService {
                 content grounded ONLY in the provided notes.
                 NOTES:
                 %s
-                """.formatted(clip(noteText, 9000));
+                """
+                .formatted(clip(noteText, 9000));
         return complete(system, "Generate the mind map JSON now.");
     }
 
@@ -253,7 +256,8 @@ public final class AIService {
                 if the list is empty return [].
                 WRONG ANSWERS (question | chosen | correct | noteId):
                 %s
-                """.formatted(clip(wrongAnswerDigest, 6000));
+                """
+                .formatted(clip(wrongAnswerDigest, 6000));
         return complete(system, "Analyze now.");
     }
 
@@ -262,8 +266,8 @@ public final class AIService {
      * trap they chose, not just what the right answer is.
      */
     public static String explainMistake(String noteTitle, String noteText, String question,
-                                        String chosenLetter, String chosenText, String correctLetter,
-                                        String correctText, String aiExplanation) throws AIServiceException {
+            String chosenLetter, String chosenText, String correctLetter,
+            String correctText, String aiExplanation) throws AIServiceException {
         String system = """
                 You are a study coach. The student answered a quiz question wrong. Explain the mistake
                 personally and briefly (2-4 sentences): why the option they picked is tempting, what
@@ -276,8 +280,8 @@ public final class AIService {
                 NOTES (%s):
                 %s
                 """.formatted(clip(question, 400), chosenLetter, clip(chosenText, 200),
-                              correctLetter, clip(correctText, 200), clip(aiExplanation, 300),
-                              noteTitle, clip(noteText, 4000));
+                correctLetter, clip(correctText, 200), clip(aiExplanation, 300),
+                noteTitle, clip(noteText, 4000));
         return complete(system, "Explain this student's mistake now.");
     }
 
@@ -293,7 +297,8 @@ public final class AIService {
                 Rules: 3-5 focus areas, plain text, grounded ONLY in the notes.
                 NOTES:
                 %s
-                """.formatted(clip(noteText, 8000));
+                """
+                .formatted(clip(noteText, 8000));
         return complete(system, "Build the 20-minute study plan now.");
     }
 
@@ -324,15 +329,19 @@ public final class AIService {
                     .build();
             HttpResponse<String> response = HTTP.send(request, HttpResponse.BodyHandlers.ofString());
 
-            if (response.statusCode() == 401) throw new IllegalStateException("Invalid Groq API key.");
-            if (response.statusCode() == 429) throw new IllegalStateException("AI rate limit reached. Please wait a moment and retry.");
-            if (response.statusCode() >= 400) throw new IllegalStateException("Groq API error " + response.statusCode() + ".");
+            if (response.statusCode() == 401)
+                throw new IllegalStateException("Invalid Groq API key.");
+            if (response.statusCode() == 429)
+                throw new IllegalStateException("AI rate limit reached. Please wait a moment and retry.");
+            if (response.statusCode() >= 400)
+                throw new IllegalStateException("Groq API error " + response.statusCode() + ".");
 
             return JsonParser.parseString(response.body()).getAsJsonObject()
                     .getAsJsonArray("choices").get(0).getAsJsonObject()
                     .getAsJsonObject("message").get("content").getAsString();
         } catch (IOException | InterruptedException e) {
-            if (e instanceof InterruptedException) Thread.currentThread().interrupt();
+            if (e instanceof InterruptedException)
+                Thread.currentThread().interrupt();
             throw new AIServiceException("The AI service is unreachable right now. Please try again.");
         } catch (IllegalStateException e) {
             throw new AIServiceException(e.getMessage());
@@ -340,7 +349,8 @@ public final class AIService {
     }
 
     private static String clip(String text, int max) {
-        if (text == null) return "";
+        if (text == null)
+            return "";
         return text.length() <= max ? text : text.substring(0, max) + "…";
     }
 }
