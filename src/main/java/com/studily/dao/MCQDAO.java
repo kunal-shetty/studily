@@ -17,7 +17,7 @@ public class MCQDAO {
 
     public void insertBatch(int noteId, List<MCQ> mcqs) throws SQLException {
         String sql = "INSERT INTO mcqs (note_id, question, option_a, option_b, option_c, option_d, "
-                   + "correct_answer, explanation, difficulty) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + "correct_answer, explanation, difficulty) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection con = DBConnection.getConnection()) {
             con.setAutoCommit(false);
             try (PreparedStatement ps = con.prepareStatement(sql)) {
@@ -44,21 +44,22 @@ public class MCQDAO {
 
     public List<MCQ> findByNote(int noteId, String difficulty) throws SQLException {
         String sql = "SELECT id, note_id, question, option_a, option_b, option_c, option_d, "
-                   + "correct_answer, explanation, difficulty FROM mcqs WHERE note_id = ?";
+                + "correct_answer, explanation, difficulty FROM mcqs WHERE note_id = ?";
         if (difficulty != null && !difficulty.isBlank()) {
             sql += " AND difficulty = ?";
         }
         sql += " ORDER BY id";
 
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, noteId);
             if (difficulty != null && !difficulty.isBlank()) {
                 ps.setString(2, difficulty);
             }
             try (ResultSet rs = ps.executeQuery()) {
                 List<MCQ> list = new ArrayList<>();
-                while (rs.next()) list.add(mapRow(rs));
+                while (rs.next())
+                    list.add(mapRow(rs));
                 return list;
             }
         }
@@ -67,7 +68,7 @@ public class MCQDAO {
     public int countByNote(int noteId) throws SQLException {
         String sql = "SELECT COUNT(*) FROM mcqs WHERE note_id = ?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, noteId);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next() ? rs.getInt(1) : 0;
@@ -78,7 +79,7 @@ public class MCQDAO {
     public int countByUser(int userId) throws SQLException {
         String sql = "SELECT COUNT(*) FROM mcqs m JOIN notes n ON m.note_id = n.note_id WHERE n.user_id = ?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, userId);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next() ? rs.getInt(1) : 0;
@@ -88,9 +89,9 @@ public class MCQDAO {
 
     public MCQ findById(int id) throws SQLException {
         String sql = "SELECT id, note_id, question, option_a, option_b, option_c, option_d, "
-                   + "correct_answer, explanation, difficulty FROM mcqs WHERE id = ?";
+                + "correct_answer, explanation, difficulty FROM mcqs WHERE id = ?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next() ? mapRow(rs) : null;
