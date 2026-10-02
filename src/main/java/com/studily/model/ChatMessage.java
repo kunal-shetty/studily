@@ -10,7 +10,7 @@ public class ChatMessage {
     private long id;
     private int userId;
     private int noteId;
-    private String role;      // "user" | "assistant"
+    private String role; // "user" | "assistant"
     private String content;
     private LocalDateTime createdAt;
 
@@ -22,21 +22,51 @@ public class ChatMessage {
         this.content = content;
     }
 
-    public long getId() { return id; }
-    public void setId(long id) { this.id = id; }
+    public long getId() {
+        return id;
+    }
 
-    public int getUserId() { return userId; }
-    public void setUserId(int userId) { this.userId = userId; }
+    public void setId(long id) {
+        this.id = id;
+    }
 
-    public int getNoteId() { return noteId; }
-    public void setNoteId(int noteId) { this.noteId = noteId; }
+    public int getUserId() {
+        return userId;
+    }
 
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
+    public int getNoteId() {
+        return noteId;
+    }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public void setNoteId(int noteId) {
+        this.noteId = noteId;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }
