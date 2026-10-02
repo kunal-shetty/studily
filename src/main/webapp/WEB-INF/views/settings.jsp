@@ -3,7 +3,7 @@
 <%@ include file="partials/head.jsp" %>
 <%@ include file="partials/flash.jsp" %>
 <%
-    UserSettings settings = (UserSettings) request.getAttribute("settings");
+UserSettings settings = (UserSettings) request.getAttribute("settings");
 %>
 <div class="container-narrow">
     <div class="page-head rise">
@@ -31,7 +31,7 @@
             <div class="choice-row">
                 <% for (String a : UserSettings.ACCENTS) { %>
                 <label class="choice accent-choice <%= settings.getAccent().equals(a) ? "selected" : "" %>">
-                    <input type="radio" name="accent" value="<%= a %>" <%= settings.getAccent().equals(a) ? "checked" : "" %>>
+                    <input type="radio" name="accent" value="<%= a %>" <%=settings.getAccent().equals(a) ? "checked" : "" %>>
                     <span class="accent-dot accent-<%= a %>"></span> <%= a.substring(0,1).toUpperCase() + a.substring(1) %>
                 </label>
                 <% } %>
@@ -43,7 +43,7 @@
             <label for="aiModel">Model used for summaries, chat, and quizzes</label>
             <select class="input" id="aiModel" name="aiModel">
                 <% for (String m : UserSettings.AI_MODELS) { %>
-                <option value="<%= m %>" <%= settings.getAiModel().equals(m) ? "selected" : "" %>><%= m %></option>
+                <option value="<%= m %>" <%=settings.getAiModel().equals(m) ? "selected" : "" %>><%= m %></option>
                 <% } %>
             </select>
             <div class="hint">Smaller models are faster; larger models give richer explanations.</div>
@@ -52,7 +52,7 @@
         <div class="card-title mt-3"><span class="icon"><svg class="i"><use href="#i-bell"/></svg></span><h3>Notifications</h3></div>
         <div class="form-group">
             <label class="check-row">
-                <input type="checkbox" name="notifications" <%= settings.isNotifications() ? "checked" : "" %>>
+                <input type="checkbox" name="notifications" <%=settings.isNotifications() ? "checked" : "" %>>
                 <span>Remind me when flashcards are due (shows the review badge)</span>
             </label>
         </div>
@@ -64,9 +64,13 @@
     // Persist appearance prefs so every page (client-side) can apply them.
     (function () {
         var prefs = {
-            accent: '<%= settings.getAccent() %>'
+            accent: "<%= settings.getAccent() %>",
         };
-        try { localStorage.setItem('snapnotes-prefs', JSON.stringify(prefs)); } catch (e) { /* private mode */ }
+        try {
+            localStorage.setItem("snapnotes-prefs", JSON.stringify(prefs));
+        } catch (e) {
+            /* private mode */
+        }
     })();
 </script>
 <%@ include file="partials/footer.jsp" %>
