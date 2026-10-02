@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * History page: all notes and all quiz attempts for the logged-in user.
  */
-@WebServlet(name = "historyServlet", urlPatterns = {"/history"})
+@WebServlet(name = "historyServlet", urlPatterns = { "/history" })
 public class HistoryServlet extends BaseAppServlet {
 
     private final NotesDAO notesDAO = new NotesDAO();
