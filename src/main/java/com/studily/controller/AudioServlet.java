@@ -25,10 +25,12 @@ import java.util.Map;
  * read aloud from (summary + extracted notes). Playback itself is done in the
  * browser with the Web Speech API — no audio is generated server-side.
  */
-@WebServlet(name = "audioServlet", urlPatterns = {"/audio"})
+@WebServlet(name = "audioServlet", urlPatterns = { "/audio" })
 public class AudioServlet extends BaseAppServlet {
 
-    /** Keep the page payload reasonable; long notes are read from the first part. */
+    /**
+     * Keep the page payload reasonable; long notes are read from the first part.
+     */
     private static final int MAX_NOTES_CHARS = 6000;
 
     private final NotesDAO notesDAO = new NotesDAO();
@@ -73,7 +75,8 @@ public class AudioServlet extends BaseAppServlet {
 
     /** Pull the readable summary paragraph out of the stored summary JSON. */
     private String extractSummary(String summaryJson) {
-        if (summaryJson == null || summaryJson.isBlank()) return null;
+        if (summaryJson == null || summaryJson.isBlank())
+            return null;
         try {
             StudyKit.SummaryBundle bundle = gson.fromJson(summaryJson, StudyKit.SummaryBundle.class);
             return bundle == null ? null : bundle.getSummary();
@@ -83,7 +86,8 @@ public class AudioServlet extends BaseAppServlet {
     }
 
     private String clip(String text, int max) {
-        if (text == null) return null;
+        if (text == null)
+            return null;
         return text.length() <= max ? text : text.substring(0, max);
     }
 }
