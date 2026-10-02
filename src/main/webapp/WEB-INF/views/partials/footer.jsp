@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-    </main>
+</main>
 </div>
 
 <!-- Global search modal (Ctrl+K) -->
@@ -24,7 +24,9 @@
     </div>
 </div>
 
-<script>window.snapnotesCtx = '<%= request.getContextPath() %>';</script>
+<script>
+    window.snapnotesCtx = "<%= request.getContextPath() %>";
+</script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script src="<%= request.getContextPath() %>/assets/js/app.js"></script>
 </body>
