@@ -18,7 +18,7 @@ import java.sql.SQLException;
 /**
  * AI mind map: generates once per note, caches in notes.mindmap_json.
  */
-@WebServlet(name = "mindMapServlet", urlPatterns = {"/mindmap"})
+@WebServlet(name = "mindMapServlet", urlPatterns = { "/mindmap" })
 public class MindMapServlet extends BaseAppServlet {
 
     private final NotesDAO notesDAO = new NotesDAO();
@@ -48,11 +48,13 @@ public class MindMapServlet extends BaseAppServlet {
             }
             if (note.getMindmapJson() == null || note.getMindmapJson().isBlank()) {
                 try {
-                    String raw = AIService.generateMindMap(note.getExtractedText() == null ? "" : note.getExtractedText());
+                    String raw = AIService
+                            .generateMindMap(note.getExtractedText() == null ? "" : note.getExtractedText());
                     String json = raw.trim();
                     int start = json.indexOf('{');
                     int end = json.lastIndexOf('}');
-                    if (start >= 0 && end > start) json = json.substring(start, end + 1);
+                    if (start >= 0 && end > start)
+                        json = json.substring(start, end + 1);
                     notesDAO.updateMindmap(noteId, json);
                     note.setMindmapJson(json);
                 } catch (AIService.AIServiceException e) {
