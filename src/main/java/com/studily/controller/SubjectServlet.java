@@ -18,7 +18,7 @@ import java.sql.SQLException;
  * Subject folders: create a folder and assign notes to it. Kept minimal —
  * creation + assignment happen from the history page.
  */
-@WebServlet(name = "subjectServlet", urlPatterns = {"/subjects"})
+@WebServlet(name = "subjectServlet", urlPatterns = { "/subjects" })
 public class SubjectServlet extends BaseAppServlet {
 
     private final ShareDAO shareDAO = new ShareDAO();
