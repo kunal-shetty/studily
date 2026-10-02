@@ -27,11 +27,10 @@ import java.util.List;
  * Upload: accepts a PDF (validated) or pasted text and stores the note
  * with pending AI generation.
  */
-@WebServlet(name = "uploadServlet", urlPatterns = {"/upload"})
-@MultipartConfig(
-        fileSizeThreshold = 1024 * 1024,      // 1 MB in memory
-        maxFileSize = 10L * 1024 * 1024,      // 10 MB per file
-        maxRequestSize = 60L * 1024 * 1024    // 60 MB per request (multi-file queue)
+@WebServlet(name = "uploadServlet", urlPatterns = { "/upload" })
+@MultipartConfig(fileSizeThreshold = 1024 * 1024, // 1 MB in memory
+        maxFileSize = 10L * 1024 * 1024, // 10 MB per file
+        maxRequestSize = 60L * 1024 * 1024 // 60 MB per request (multi-file queue)
 )
 public class UploadServlet extends BaseAppServlet {
 
@@ -79,7 +78,8 @@ public class UploadServlet extends BaseAppServlet {
             return;
         }
 
-        // --- Multi-file queue: each PDF becomes its own note, titled "<title> — <filename>".
+        // --- Multi-file queue: each PDF becomes its own note, titled "<title> —
+        // <filename>".
         if (hasFiles) {
             List<Integer> queuedIds = new ArrayList<>();
             List<String> failedNames = new ArrayList<>();
