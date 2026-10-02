@@ -18,7 +18,7 @@ import java.util.List;
  * Spaced-repetition study session. GET renders the due queue as a review
  * deck; POST records an Again/Hard/Good/Easy rating and reschedules.
  */
-@WebServlet(name = "reviewServlet", urlPatterns = {"/review"})
+@WebServlet(name = "reviewServlet", urlPatterns = { "/review" })
 public class ReviewServlet extends BaseAppServlet {
 
     private final ReviewDAO reviewDAO = new ReviewDAO();
@@ -67,7 +67,8 @@ public class ReviewServlet extends BaseAppServlet {
             FlashcardReview r = reviewDAO.getOrCreate(user.getUserId(), (int) cardId);
             FlashcardReview.applyRating(r, rating);
             if (r.getId() == 0) {
-                // State row was created inside getOrCreate but id not set on this path; persist insert.
+                // State row was created inside getOrCreate but id not set on this path; persist
+                // insert.
                 reviewDAO.update(r);
             } else {
                 reviewDAO.update(r);
