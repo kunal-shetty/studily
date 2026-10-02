@@ -21,8 +21,7 @@ public final class Flash {
     @SuppressWarnings("unchecked")
     public static void add(HttpServletRequest request, String type, String message) {
         HttpSession session = request.getSession();
-        java.util.List<String[]> messages =
-                (java.util.List<String[]>) session.getAttribute(SESSION_KEY);
+        java.util.List<String[]> messages = (java.util.List<String[]>) session.getAttribute(SESSION_KEY);
         if (messages == null) {
             messages = new java.util.ArrayList<>();
             session.setAttribute(SESSION_KEY, messages);
@@ -48,8 +47,7 @@ public final class Flash {
         if (session == null) {
             return java.util.List.of();
         }
-        java.util.List<String[]> messages =
-                (java.util.List<String[]>) session.getAttribute(SESSION_KEY);
+        java.util.List<String[]> messages = (java.util.List<String[]>) session.getAttribute(SESSION_KEY);
         if (messages != null) {
             session.removeAttribute(SESSION_KEY);
         }
