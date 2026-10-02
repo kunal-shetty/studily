@@ -17,7 +17,7 @@ import java.sql.SQLException;
 /**
  * Personalized dashboard: all metrics come from MySQL via DAOs.
  */
-@WebServlet(name = "dashboardServlet", urlPatterns = {"/dashboard"})
+@WebServlet(name = "dashboardServlet", urlPatterns = { "/dashboard" })
 public class DashboardServlet extends BaseAppServlet {
 
     private final DashboardService dashboardService = new DashboardService();
