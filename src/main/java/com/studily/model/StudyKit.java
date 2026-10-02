@@ -16,26 +16,61 @@ public class StudyKit {
     private List<Flashcard> flashcards;
     private List<MCQ> mcqs;
 
-    public Note getNote() { return note; }
-    public void setNote(Note note) { this.note = note; }
+    public Note getNote() {
+        return note;
+    }
 
-    public String getSummary() { return summary; }
-    public void setSummary(String summary) { this.summary = summary; }
+    public void setNote(Note note) {
+        this.note = note;
+    }
 
-    public List<String> getKeyConcepts() { return keyConcepts; }
-    public void setKeyConcepts(List<String> keyConcepts) { this.keyConcepts = keyConcepts; }
+    public String getSummary() {
+        return summary;
+    }
 
-    public List<String> getDefinitions() { return definitions; }
-    public void setDefinitions(List<String> definitions) { this.definitions = definitions; }
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
 
-    public List<String> getExamTips() { return examTips; }
-    public void setExamTips(List<String> examTips) { this.examTips = examTips; }
+    public List<String> getKeyConcepts() {
+        return keyConcepts;
+    }
 
-    public List<Flashcard> getFlashcards() { return flashcards; }
-    public void setFlashcards(List<Flashcard> flashcards) { this.flashcards = flashcards; }
+    public void setKeyConcepts(List<String> keyConcepts) {
+        this.keyConcepts = keyConcepts;
+    }
 
-    public List<MCQ> getMcqs() { return mcqs; }
-    public void setMcqs(List<MCQ> mcqs) { this.mcqs = mcqs; }
+    public List<String> getDefinitions() {
+        return definitions;
+    }
+
+    public void setDefinitions(List<String> definitions) {
+        this.definitions = definitions;
+    }
+
+    public List<String> getExamTips() {
+        return examTips;
+    }
+
+    public void setExamTips(List<String> examTips) {
+        this.examTips = examTips;
+    }
+
+    public List<Flashcard> getFlashcards() {
+        return flashcards;
+    }
+
+    public void setFlashcards(List<Flashcard> flashcards) {
+        this.flashcards = flashcards;
+    }
+
+    public List<MCQ> getMcqs() {
+        return mcqs;
+    }
+
+    public void setMcqs(List<MCQ> mcqs) {
+        this.mcqs = mcqs;
+    }
 
     /**
      * Structured summary document the AI must return.
@@ -54,16 +89,37 @@ public class StudyKit {
         @SerializedName("exam_tips")
         private List<String> examTips;
 
-        public String getSummary() { return summary; }
-        public void setSummary(String summary) { this.summary = summary; }
+        public String getSummary() {
+            return summary;
+        }
 
-        public List<String> getKeyConcepts() { return keyConcepts; }
-        public void setKeyConcepts(List<String> keyConcepts) { this.keyConcepts = keyConcepts; }
+        public void setSummary(String summary) {
+            this.summary = summary;
+        }
 
-        public List<String> getDefinitions() { return definitions; }
-        public void setDefinitions(List<String> definitions) { this.definitions = definitions; }
-        public void setExamTips(List<String> examTips) { this.examTips = examTips; }
-        public List<String> getExamTips() { return examTips; }
+        public List<String> getKeyConcepts() {
+            return keyConcepts;
+        }
+
+        public void setKeyConcepts(List<String> keyConcepts) {
+            this.keyConcepts = keyConcepts;
+        }
+
+        public List<String> getDefinitions() {
+            return definitions;
+        }
+
+        public void setDefinitions(List<String> definitions) {
+            this.definitions = definitions;
+        }
+
+        public void setExamTips(List<String> examTips) {
+            this.examTips = examTips;
+        }
+
+        public List<String> getExamTips() {
+            return examTips;
+        }
     }
 
     /**
@@ -77,11 +133,21 @@ public class StudyKit {
         @SerializedName("answer")
         private String answer;
 
-        public String getQuestion() { return question; }
-        public void setQuestion(String question) { this.question = question; }
+        public String getQuestion() {
+            return question;
+        }
 
-        public String getAnswer() { return answer; }
-        public void setAnswer(String answer) { this.answer = answer; }
+        public void setQuestion(String question) {
+            this.question = question;
+        }
+
+        public String getAnswer() {
+            return answer;
+        }
+
+        public void setAnswer(String answer) {
+            this.answer = answer;
+        }
     }
 
     /**
@@ -92,10 +158,14 @@ public class StudyKit {
         @SerializedName("question")
         private String question;
 
-        @SerializedName("option_a") private String optionA;
-        @SerializedName("option_b") private String optionB;
-        @SerializedName("option_c") private String optionC;
-        @SerializedName("option_d") private String optionD;
+        @SerializedName("option_a")
+        private String optionA;
+        @SerializedName("option_b")
+        private String optionB;
+        @SerializedName("option_c")
+        private String optionC;
+        @SerializedName("option_d")
+        private String optionD;
 
         @SerializedName("correct_answer")
         private String correctAnswer;
@@ -106,26 +176,69 @@ public class StudyKit {
         @SerializedName("difficulty")
         private String difficulty;
 
-        public String getQuestion() { return question; }
-        public void setQuestion(String question) { this.question = question; }
+        public String getQuestion() {
+            return question;
+        }
 
-        public String getOptionA() { return optionA; }
-        public void setOptionA(String optionA) { this.optionA = optionA; }
-        public String getOptionB() { return optionB; }
-        public void setOptionB(String optionB) { this.optionB = optionB; }
-        public String getOptionC() { return optionC; }
-        public void setOptionC(String optionC) { this.optionC = optionC; }
-        public String getOptionD() { return optionD; }
-        public void setOptionD(String optionD) { this.optionD = optionD; }
+        public void setQuestion(String question) {
+            this.question = question;
+        }
 
-        public String getCorrectAnswer() { return correctAnswer; }
-        public void setCorrectAnswer(String correctAnswer) { this.correctAnswer = correctAnswer; }
+        public String getOptionA() {
+            return optionA;
+        }
 
-        public String getExplanation() { return explanation; }
-        public void setExplanation(String explanation) { this.explanation = explanation; }
+        public void setOptionA(String optionA) {
+            this.optionA = optionA;
+        }
 
-        public String getDifficulty() { return difficulty; }
-        public void setDifficulty(String difficulty) { this.difficulty = difficulty; }
+        public String getOptionB() {
+            return optionB;
+        }
+
+        public void setOptionB(String optionB) {
+            this.optionB = optionB;
+        }
+
+        public String getOptionC() {
+            return optionC;
+        }
+
+        public void setOptionC(String optionC) {
+            this.optionC = optionC;
+        }
+
+        public String getOptionD() {
+            return optionD;
+        }
+
+        public void setOptionD(String optionD) {
+            this.optionD = optionD;
+        }
+
+        public String getCorrectAnswer() {
+            return correctAnswer;
+        }
+
+        public void setCorrectAnswer(String correctAnswer) {
+            this.correctAnswer = correctAnswer;
+        }
+
+        public String getExplanation() {
+            return explanation;
+        }
+
+        public void setExplanation(String explanation) {
+            this.explanation = explanation;
+        }
+
+        public String getDifficulty() {
+            return difficulty;
+        }
+
+        public void setDifficulty(String difficulty) {
+            this.difficulty = difficulty;
+        }
     }
 
     /**
@@ -142,13 +255,28 @@ public class StudyKit {
         @SerializedName("mcqs")
         private List<MCQItem> mcqs;
 
-        public SummaryBundle getSummary() { return summary; }
-        public void setSummary(SummaryBundle summary) { this.summary = summary; }
+        public SummaryBundle getSummary() {
+            return summary;
+        }
 
-        public List<FlashcardItem> getFlashcards() { return flashcards; }
-        public void setFlashcards(List<FlashcardItem> flashcards) { this.flashcards = flashcards; }
+        public void setSummary(SummaryBundle summary) {
+            this.summary = summary;
+        }
 
-        public List<MCQItem> getMcqs() { return mcqs; }
-        public void setMcqs(List<MCQItem> mcqs) { this.mcqs = mcqs; }
+        public List<FlashcardItem> getFlashcards() {
+            return flashcards;
+        }
+
+        public void setFlashcards(List<FlashcardItem> flashcards) {
+            this.flashcards = flashcards;
+        }
+
+        public List<MCQItem> getMcqs() {
+            return mcqs;
+        }
+
+        public void setMcqs(List<MCQItem> mcqs) {
+            this.mcqs = mcqs;
+        }
     }
 }
