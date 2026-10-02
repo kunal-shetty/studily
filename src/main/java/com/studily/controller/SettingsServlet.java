@@ -15,7 +15,7 @@ import java.io.IOException;
 /**
  * Settings page: appearance (dark/light, accent), AI model, notifications.
  */
-@WebServlet(name = "settingsServlet", urlPatterns = {"/settings"})
+@WebServlet(name = "settingsServlet", urlPatterns = { "/settings" })
 public class SettingsServlet extends BaseAppServlet {
 
     private final SettingsDAO settingsDAO = new SettingsDAO();
