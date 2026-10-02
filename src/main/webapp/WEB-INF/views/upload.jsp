@@ -2,7 +2,7 @@
 <%@ include file="partials/head.jsp" %>
 <%@ include file="partials/flash.jsp" %>
 <%
-    request.setAttribute("navActive", "upload");
+request.setAttribute("navActive", "upload");
 %>
 <div class="container-narrow">
     <div class="page-head rise">
@@ -13,8 +13,15 @@
     <form class="card rise rise-1" method="post" action="<%= ctx %>/upload" enctype="multipart/form-data" id="upload-form">
         <div class="form-group">
             <label for="title">Title</label>
-            <input class="input" type="text" id="title" name="title" required maxlength="200"
-                   placeholder="e.g. DBMS — Unit 3: Normalization">
+            <input
+                class="input"
+                type="text"
+                id="title"
+                name="title"
+                required
+                maxlength="200"
+                placeholder="e.g. DBMS — Unit 3: Normalization"
+            >
         </div>
 
         <div class="form-group">
@@ -49,40 +56,49 @@
 </div>
 <script>
     // Show a premium loading state while the AI generation round-trips.
-    var pdfInput = document.getElementById('pdf-input');
-    var queueBox = document.getElementById('upload-queue');
+    var pdfInput = document.getElementById("pdf-input");
+    var queueBox = document.getElementById("upload-queue");
 
     function renderQueue(files) {
-        queueBox.innerHTML = '';
-        if (!files.length) { queueBox.style.display = 'none'; return; }
-        queueBox.style.display = 'block';
+        queueBox.innerHTML = "";
+        if (!files.length) {
+            queueBox.style.display = "none";
+            return;
+        }
+        queueBox.style.display = "block";
         for (var i = 0; i < files.length; i++) {
             var f = files[i];
-            var row = document.createElement('div');
-            row.className = 'queue-row';
-            row.innerHTML = '<span class="q-icon"><svg class="i i-sm"><use href="#i-file"/></svg></span><span class="q-name"></span>' +
-                '<span class="q-size text-dim">' + (f.size / 1048576).toFixed(1) + ' MB</span>';
-            row.querySelector('.q-name').textContent = f.name;
+            var row = document.createElement("div");
+            row.className = "queue-row";
+            row.innerHTML =
+                '<span class="q-icon"><svg class="i i-sm"><use href="#i-file"/></svg></span><span class="q-name"></span>' +
+                '<span class="q-size text-dim">' +
+                (f.size / 1048576).toFixed(1) +
+                " MB</span>";
+            row.querySelector(".q-name").textContent = f.name;
             queueBox.appendChild(row);
         }
-        var label = document.getElementById('file-label');
-        label.textContent = files.length === 1 ? files[0].name : files.length + ' PDFs queued';
+        var label = document.getElementById("file-label");
+        label.textContent =
+            files.length === 1 ? files[0].name : files.length + " PDFs queued";
     }
 
-    pdfInput.addEventListener('change', function () { renderQueue(Array.from(pdfInput.files)); });
+    pdfInput.addEventListener("change", function () {
+        renderQueue(Array.from(pdfInput.files));
+    });
 
-    document.getElementById('upload-form').addEventListener('submit', function () {
-        var btn = document.getElementById('upload-btn');
+    document.getElementById("upload-form").addEventListener("submit", function () {
+        var btn = document.getElementById("upload-btn");
         btn.disabled = true;
-        btn.textContent = 'Uploading…';
-        var card = document.getElementById('ai-loader-card');
-        card.style.display = 'block';
-        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        var fill = document.getElementById('upload-progress');
+        btn.textContent = "Uploading…";
+        var card = document.getElementById("ai-loader-card");
+        card.style.display = "block";
+        card.scrollIntoView({ behavior: "smooth", block: "center" });
+        var fill = document.getElementById("upload-progress");
         var w = 8;
         var t = setInterval(function () {
             w = Math.min(w + Math.random() * 7, 92);
-            fill.style.width = w + '%';
+            fill.style.width = w + "%";
         }, 350);
     });
 </script>
