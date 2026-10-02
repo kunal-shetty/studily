@@ -7,13 +7,13 @@
 <%@ include file="partials/head.jsp" %>
 <%@ include file="partials/flash.jsp" %>
 <%
-    Note note = (Note) request.getAttribute("note");
-    StudyKit.SummaryBundle bundle = (StudyKit.SummaryBundle) request.getAttribute("bundle");
-    int flashcardCount = (Integer) request.getAttribute("flashcardCount");
-    int mcqCount = (Integer) request.getAttribute("mcqCount");
-    boolean needsGeneration = (Boolean) request.getAttribute("needsGeneration");
-    Map<Integer, String> subjects = (Map<Integer, String>) request.getAttribute("subjects");
-    DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMM d, yyyy");
+Note note = (Note) request.getAttribute("note");
+StudyKit.SummaryBundle bundle = (StudyKit.SummaryBundle) request.getAttribute("bundle");
+int flashcardCount = (Integer) request.getAttribute("flashcardCount");
+int mcqCount = (Integer) request.getAttribute("mcqCount");
+boolean needsGeneration = (Boolean) request.getAttribute("needsGeneration");
+Map<Integer, String> subjects = (Map<Integer, String>) request.getAttribute("subjects");
+DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMM d, yyyy");
 %>
 <div class="container">
     <div class="page-head rise">
@@ -44,15 +44,19 @@
             <input type="hidden" name="action" value="assign">
             <input type="hidden" name="noteId" value="<%= note.getNoteId() %>">
             <select class="input input-sm" name="subjectId" onchange="this.form.submit()">
-                <option value="" <%= note.getSubjectId() == null ? "selected" : "" %>>No folder</option>
+                <option value="" <%=note.getSubjectId()==null ? "selected" : "" %>>No folder</option>
                 <% for (Map.Entry<Integer, String> s : subjects.entrySet()) { %>
-                <option value="<%= s.getKey() %>" <%= note.getSubjectId() != null && note.getSubjectId() == s.getKey() ? "selected" : "" %>><%= s.getValue() %></option>
+                <option value="<%= s.getKey() %>" <%=note.getSubjectId() !=null && note.getSubjectId()==s.getKey() ? "selected" : "" %>><%= s.getValue() %></option>
                 <% } %>
             </select>
         </form>
         <% if (!needsGeneration) { %>
-        <button type="button" class="btn btn-ghost btn-sm js-tts" data-tts-src="#summary-read"
-                data-tts-title="<%= note.getTitle() %>"><svg class="i"><use href="#i-volume"/></svg> Listen</button>
+        <button
+            type="button"
+            class="btn btn-ghost btn-sm js-tts"
+            data-tts-src="#summary-read"
+            data-tts-title="<%= note.getTitle() %>"
+        ><svg class="i"><use href="#i-volume"/></svg> Listen</button>
         <% } %>
     </div>
 
@@ -68,60 +72,60 @@
     <% } else { %>
 
     <div id="summary-read">
-    <div class="card rise rise-1">
-        <div class="card-title">
-            <span class="icon"><svg class="i"><use href="#i-file"/></svg></span>
-            <h3>Summary</h3>
-        </div>
-        <p style="color: var(--text); font-size: 1.02rem"><%= bundle.getSummary() %></p>
-    </div>
-
-    <div class="grid-2 mt-3">
-        <div class="card rise rise-2">
+        <div class="card rise rise-1">
             <div class="card-title">
-                <span class="icon"><svg class="i"><use href="#i-key"/></svg></span>
-                <h3>Key Concepts</h3>
+                <span class="icon"><svg class="i"><use href="#i-file"/></svg></span>
+                <h3>Summary</h3>
             </div>
-            <%
+            <p style="color: var(--text); font-size: 1.02rem"><%= bundle.getSummary() %></p>
+        </div>
+
+        <div class="grid-2 mt-3">
+            <div class="card rise rise-2">
+                <div class="card-title">
+                    <span class="icon"><svg class="i"><use href="#i-key"/></svg></span>
+                    <h3>Key Concepts</h3>
+                </div>
+                <%
                 List<String> concepts = bundle.getKeyConcepts();
-                if (concepts == null || concepts.isEmpty()) {
-            %><p class="text-dim">No key concepts extracted.</p><% } else { %>
-            <div class="chip-list">
-                <% for (String c : concepts) { %><span class="chip"><%= c %></span><% } %>
+                    if (concepts == null || concepts.isEmpty()) {
+                    %><p class="text-dim">No key concepts extracted.</p><% } else { %>
+                    <div class="chip-list">
+                        <% for (String c : concepts) { %><span class="chip"><%= c %></span><% } %>
+                    </div>
+                    <% } %>
             </div>
-            <% } %>
+
+            <div class="card rise rise-2">
+                <div class="card-title">
+                    <span class="icon"><svg class="i"><use href="#i-book"/></svg></span>
+                    <h3>Important Definitions</h3>
+                </div>
+                <%
+                List<String> defs = bundle.getDefinitions();
+                    if (defs == null || defs.isEmpty()) {
+                    %><p class="text-dim">No definitions extracted.</p><% } else { %>
+                    <% for (String d : defs) { %>
+                    <div class="def-item"><%= d %></div>
+                    <% } %>
+                    <% } %>
+            </div>
         </div>
 
-        <div class="card rise rise-2">
+        <div class="card mt-3 rise rise-3">
             <div class="card-title">
-                <span class="icon"><svg class="i"><use href="#i-book"/></svg></span>
-                <h3>Important Definitions</h3>
+                <span class="icon"><svg class="i"><use href="#i-grad"/></svg></span>
+                <h3>Exam Tips</h3>
             </div>
             <%
-                List<String> defs = bundle.getDefinitions();
-                if (defs == null || defs.isEmpty()) {
-            %><p class="text-dim">No definitions extracted.</p><% } else { %>
-                <% for (String d : defs) { %>
-            <div class="def-item"><%= d %></div>
-                <% } %>
-            <% } %>
-        </div>
-    </div>
-
-    <div class="card mt-3 rise rise-3">
-        <div class="card-title">
-            <span class="icon"><svg class="i"><use href="#i-grad"/></svg></span>
-            <h3>Exam Tips</h3>
-        </div>
-        <%
             List<String> tips = bundle.getExamTips();
-            if (tips == null || tips.isEmpty()) {
-        %><p class="text-dim">No exam tips generated.</p><% } else { %>
-            <% for (String t : tips) { %>
-        <div class="tip-item"><svg class="i"><use href="#i-bulb"/></svg><span><%= t %></span></div>
-            <% } %>
-        <% } %>
-    </div>
+                if (tips == null || tips.isEmpty()) {
+                %><p class="text-dim">No exam tips generated.</p><% } else { %>
+                <% for (String t : tips) { %>
+                <div class="tip-item"><svg class="i"><use href="#i-bulb"/></svg><span><%= t %></span></div>
+                <% } %>
+                <% } %>
+        </div>
     </div><!-- /#summary-read -->
 
     <div class="grid-2 mt-3">
