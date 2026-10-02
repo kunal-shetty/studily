@@ -33,10 +33,10 @@ public class FlashcardReview {
         double ef = r.easeFactor <= 0 ? 2.5 : r.easeFactor;
         if (rating == RATING_AGAIN) {
             r.repetitions = 0;
-            r.intervalDays = 0;               // due again immediately
+            r.intervalDays = 0; // due again immediately
             ef = Math.max(1.3, ef - 0.20);
         } else {
-            int q = rating;                    // hard=2 good=3 easy=4
+            int q = rating; // hard=2 good=3 easy=4
             ef = ef + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02));
             ef = Math.max(1.3, Math.min(2.8, ef));
             r.repetitions = r.repetitions + 1;
@@ -45,7 +45,8 @@ public class FlashcardReview {
             } else if (r.repetitions == 2) {
                 r.intervalDays = rating == RATING_HARD ? 3 : rating == RATING_GOOD ? 6 : 9;
             } else {
-                r.intervalDays = (int) Math.round(r.intervalDays * ef * (rating == RATING_HARD ? 0.7 : rating == RATING_EASY ? 1.3 : 1.0));
+                r.intervalDays = (int) Math
+                        .round(r.intervalDays * ef * (rating == RATING_HARD ? 0.7 : rating == RATING_EASY ? 1.3 : 1.0));
                 r.intervalDays = Math.max(1, Math.min(365, r.intervalDays));
             }
         }
@@ -57,42 +58,107 @@ public class FlashcardReview {
                 : LocalDateTime.now().plusDays(r.intervalDays);
     }
 
-    public long getId() { return id; }
-    public void setId(long id) { this.id = id; }
+    public long getId() {
+        return id;
+    }
 
-    public int getCardId() { return cardId; }
-    public void setCardId(int cardId) { this.cardId = cardId; }
+    public void setId(long id) {
+        this.id = id;
+    }
 
-    public int getUserId() { return userId; }
-    public void setUserId(int userId) { this.userId = userId; }
+    public int getCardId() {
+        return cardId;
+    }
 
-    public double getEaseFactor() { return easeFactor; }
-    public void setEaseFactor(double easeFactor) { this.easeFactor = easeFactor; }
+    public void setCardId(int cardId) {
+        this.cardId = cardId;
+    }
 
-    public int getIntervalDays() { return intervalDays; }
-    public void setIntervalDays(int intervalDays) { this.intervalDays = intervalDays; }
+    public int getUserId() {
+        return userId;
+    }
 
-    public int getRepetitions() { return repetitions; }
-    public void setRepetitions(int repetitions) { this.repetitions = repetitions; }
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
-    public LocalDateTime getDueDate() { return dueDate; }
-    public void setDueDate(LocalDateTime dueDate) { this.dueDate = dueDate; }
+    public double getEaseFactor() {
+        return easeFactor;
+    }
 
-    public Integer getLastRating() { return lastRating; }
-    public void setLastRating(Integer lastRating) { this.lastRating = lastRating; }
+    public void setEaseFactor(double easeFactor) {
+        this.easeFactor = easeFactor;
+    }
 
-    public LocalDateTime getLastReviewedAt() { return lastReviewedAt; }
-    public void setLastReviewedAt(LocalDateTime lastReviewedAt) { this.lastReviewedAt = lastReviewedAt; }
+    public int getIntervalDays() {
+        return intervalDays;
+    }
 
-    public String getQuestion() { return question; }
-    public void setQuestion(String question) { this.question = question; }
+    public void setIntervalDays(int intervalDays) {
+        this.intervalDays = intervalDays;
+    }
 
-    public String getAnswer() { return answer; }
-    public void setAnswer(String answer) { this.answer = answer; }
+    public int getRepetitions() {
+        return repetitions;
+    }
 
-    public int getNoteId() { return noteId; }
-    public void setNoteId(int noteId) { this.noteId = noteId; }
+    public void setRepetitions(int repetitions) {
+        this.repetitions = repetitions;
+    }
 
-    public String getNoteTitle() { return noteTitle; }
-    public void setNoteTitle(String noteTitle) { this.noteTitle = noteTitle; }
+    public LocalDateTime getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDateTime dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public Integer getLastRating() {
+        return lastRating;
+    }
+
+    public void setLastRating(Integer lastRating) {
+        this.lastRating = lastRating;
+    }
+
+    public LocalDateTime getLastReviewedAt() {
+        return lastReviewedAt;
+    }
+
+    public void setLastReviewedAt(LocalDateTime lastReviewedAt) {
+        this.lastReviewedAt = lastReviewedAt;
+    }
+
+    public String getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(String question) {
+        this.question = question;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
+    public int getNoteId() {
+        return noteId;
+    }
+
+    public void setNoteId(int noteId) {
+        this.noteId = noteId;
+    }
+
+    public String getNoteTitle() {
+        return noteTitle;
+    }
+
+    public void setNoteTitle(String noteTitle) {
+        this.noteTitle = noteTitle;
+    }
 }
