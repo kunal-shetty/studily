@@ -19,7 +19,7 @@ import java.util.Map;
 /**
  * GitHub-style profile: stats, badges, weekly leaderboard position.
  */
-@WebServlet(name = "profileServlet", urlPatterns = {"/profile"})
+@WebServlet(name = "profileServlet", urlPatterns = { "/profile" })
 public class ProfileServlet extends BaseAppServlet {
 
     private final DashboardService dashboardService = new DashboardService();
@@ -41,7 +41,8 @@ public class ProfileServlet extends BaseAppServlet {
             p.setBadges(engagementDAO.badgesFor(user.getUserId()));
 
             double accuracy = quizAnswerDAO.accuracyByUser(user.getUserId());
-            if (accuracy <= 0) accuracy = stats.getAverageScore();
+            if (accuracy <= 0)
+                accuracy = stats.getAverageScore();
             engagementDAO.syncBadges(user.getUserId(), stats.getTotalNotes(),
                     stats.getTotalFlashcards(), accuracy, stats.getStudyStreak(), false);
             p.setBadges(engagementDAO.badgesFor(user.getUserId()));
