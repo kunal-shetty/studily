@@ -21,7 +21,7 @@ import java.util.Map;
  * Smart revision calendar: month grid with per-day activity level plus a
  * drill-down list for a selected day.
  */
-@WebServlet(name = "calendarServlet", urlPatterns = {"/calendar"})
+@WebServlet(name = "calendarServlet", urlPatterns = { "/calendar" })
 public class CalendarServlet extends BaseAppServlet {
 
     private final EngagementDAO engagementDAO = new EngagementDAO();
