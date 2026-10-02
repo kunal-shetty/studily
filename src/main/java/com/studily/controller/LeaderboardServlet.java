@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * Weekly XP leaderboard — gamified consistency, reset every Monday.
  */
-@WebServlet(name = "leaderboardServlet", urlPatterns = {"/leaderboard"})
+@WebServlet(name = "leaderboardServlet", urlPatterns = { "/leaderboard" })
 public class LeaderboardServlet extends BaseAppServlet {
 
     private final EngagementDAO engagementDAO = new EngagementDAO();
