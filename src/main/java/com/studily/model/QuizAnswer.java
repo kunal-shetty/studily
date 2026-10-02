@@ -14,24 +14,59 @@ public class QuizAnswer {
     private boolean correct;
     private String noteQuestion;
 
-    public long getId() { return id; }
-    public void setId(long id) { this.id = id; }
+    public long getId() {
+        return id;
+    }
 
-    public int getResultId() { return resultId; }
-    public void setResultId(int resultId) { this.resultId = resultId; }
+    public void setId(long id) {
+        this.id = id;
+    }
 
-    public int getMcqId() { return mcqId; }
-    public void setMcqId(int mcqId) { this.mcqId = mcqId; }
+    public int getResultId() {
+        return resultId;
+    }
 
-    public int getUserId() { return userId; }
-    public void setUserId(int userId) { this.userId = userId; }
+    public void setResultId(int resultId) {
+        this.resultId = resultId;
+    }
 
-    public String getChosenAnswer() { return chosenAnswer; }
-    public void setChosenAnswer(String chosenAnswer) { this.chosenAnswer = chosenAnswer; }
+    public int getMcqId() {
+        return mcqId;
+    }
 
-    public boolean isCorrect() { return correct; }
-    public void setCorrect(boolean correct) { this.correct = correct; }
+    public void setMcqId(int mcqId) {
+        this.mcqId = mcqId;
+    }
 
-    public String getNoteQuestion() { return noteQuestion; }
-    public void setNoteQuestion(String noteQuestion) { this.noteQuestion = noteQuestion; }
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getChosenAnswer() {
+        return chosenAnswer;
+    }
+
+    public void setChosenAnswer(String chosenAnswer) {
+        this.chosenAnswer = chosenAnswer;
+    }
+
+    public boolean isCorrect() {
+        return correct;
+    }
+
+    public void setCorrect(boolean correct) {
+        this.correct = correct;
+    }
+
+    public String getNoteQuestion() {
+        return noteQuestion;
+    }
+
+    public void setNoteQuestion(String noteQuestion) {
+        this.noteQuestion = noteQuestion;
+    }
 }
