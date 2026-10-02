@@ -14,7 +14,7 @@ public class SettingsDAO {
     public UserSettings getOrCreate(int userId) throws SQLException {
         String sql = "SELECT user_id, theme, accent, ai_model, notifications FROM user_settings WHERE user_id = ?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, userId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -31,9 +31,9 @@ public class SettingsDAO {
         UserSettings s = new UserSettings();
         s.setUserId(userId);
         String ins = "INSERT INTO user_settings (user_id, theme, accent, ai_model, notifications, updated_at) "
-                   + "VALUES (?, ?, ?, ?, ?, ?)";
+                + "VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(ins)) {
+                PreparedStatement ps = con.prepareStatement(ins)) {
             ps.setInt(1, userId);
             ps.setString(2, s.getTheme());
             ps.setString(3, s.getAccent());
@@ -47,9 +47,9 @@ public class SettingsDAO {
 
     public void update(UserSettings s) throws SQLException {
         String sql = "UPDATE user_settings SET theme = ?, accent = ?, ai_model = ?, notifications = ?, updated_at = ? "
-                   + "WHERE user_id = ?";
+                + "WHERE user_id = ?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, s.getTheme());
             ps.setString(2, s.getAccent());
             ps.setString(3, s.getAiModel());
