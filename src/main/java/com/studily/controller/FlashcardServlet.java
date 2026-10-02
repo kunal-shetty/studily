@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Flashcard study view for one note.
  */
-@WebServlet(name = "flashcardServlet", urlPatterns = {"/flashcards"})
+@WebServlet(name = "flashcardServlet", urlPatterns = { "/flashcards" })
 public class FlashcardServlet extends BaseAppServlet {
 
     private final FlashcardDAO flashcardDAO = new FlashcardDAO();
