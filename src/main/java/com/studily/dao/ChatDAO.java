@@ -15,7 +15,7 @@ public class ChatDAO {
     public void insert(int userId, int noteId, String role, String content) throws SQLException {
         String sql = "INSERT INTO chat_messages (user_id, note_id, role, content) VALUES (?, ?, ?, ?)";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, userId);
             ps.setInt(2, noteId);
             ps.setString(3, role);
@@ -27,9 +27,9 @@ public class ChatDAO {
     public List<ChatMessage> findByNote(int userId, int noteId, int limit) throws SQLException {
         // Newest first, then reverse in Java for chronological display.
         String sql = "SELECT id, user_id, note_id, role, content, created_at "
-                   + "FROM chat_messages WHERE user_id = ? AND note_id = ? ORDER BY id DESC LIMIT ?";
+                + "FROM chat_messages WHERE user_id = ? AND note_id = ? ORDER BY id DESC LIMIT ?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, userId);
             ps.setInt(2, noteId);
             ps.setInt(3, limit);
@@ -55,7 +55,7 @@ public class ChatDAO {
     public void clearForNote(int userId, int noteId) throws SQLException {
         String sql = "DELETE FROM chat_messages WHERE user_id = ? AND note_id = ?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, userId);
             ps.setInt(2, noteId);
             ps.executeUpdate();
