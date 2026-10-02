@@ -19,24 +19,59 @@ public class QuizResult {
         return totalQuestions == 0 ? 0.0 : (score * 100.0) / totalQuestions;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
+        return id;
+    }
 
-    public int getUserId() { return userId; }
-    public void setUserId(int userId) { this.userId = userId; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public int getNoteId() { return noteId; }
-    public void setNoteId(int noteId) { this.noteId = noteId; }
+    public int getUserId() {
+        return userId;
+    }
 
-    public int getScore() { return score; }
-    public void setScore(int score) { this.score = score; }
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
-    public int getTotalQuestions() { return totalQuestions; }
-    public void setTotalQuestions(int totalQuestions) { this.totalQuestions = totalQuestions; }
+    public int getNoteId() {
+        return noteId;
+    }
 
-    public LocalDateTime getAttemptDate() { return attemptDate; }
-    public void setAttemptDate(LocalDateTime attemptDate) { this.attemptDate = attemptDate; }
+    public void setNoteId(int noteId) {
+        this.noteId = noteId;
+    }
 
-    public String getNoteTitle() { return noteTitle; }
-    public void setNoteTitle(String noteTitle) { this.noteTitle = noteTitle; }
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public int getTotalQuestions() {
+        return totalQuestions;
+    }
+
+    public void setTotalQuestions(int totalQuestions) {
+        this.totalQuestions = totalQuestions;
+    }
+
+    public LocalDateTime getAttemptDate() {
+        return attemptDate;
+    }
+
+    public void setAttemptDate(LocalDateTime attemptDate) {
+        this.attemptDate = attemptDate;
+    }
+
+    public String getNoteTitle() {
+        return noteTitle;
+    }
+
+    public void setNoteTitle(String noteTitle) {
+        this.noteTitle = noteTitle;
+    }
 }
