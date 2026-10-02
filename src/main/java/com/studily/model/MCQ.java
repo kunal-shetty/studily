@@ -23,7 +23,8 @@ public class MCQ {
     }
 
     public String getOptionByLetter(String letter) {
-        if (letter == null) return null;
+        if (letter == null)
+            return null;
         return switch (letter.toUpperCase()) {
             case "A" -> optionA;
             case "B" -> optionB;
@@ -37,33 +38,83 @@ public class MCQ {
         return letter != null && letter.trim().toUpperCase().equals(correctAnswer);
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
+        return id;
+    }
 
-    public int getNoteId() { return noteId; }
-    public void setNoteId(int noteId) { this.noteId = noteId; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getQuestion() { return question; }
-    public void setQuestion(String question) { this.question = question; }
+    public int getNoteId() {
+        return noteId;
+    }
 
-    public String getOptionA() { return optionA; }
-    public void setOptionA(String optionA) { this.optionA = optionA; }
+    public void setNoteId(int noteId) {
+        this.noteId = noteId;
+    }
 
-    public String getOptionB() { return optionB; }
-    public void setOptionB(String optionB) { this.optionB = optionB; }
+    public String getQuestion() {
+        return question;
+    }
 
-    public String getOptionC() { return optionC; }
-    public void setOptionC(String optionC) { this.optionC = optionC; }
+    public void setQuestion(String question) {
+        this.question = question;
+    }
 
-    public String getOptionD() { return optionD; }
-    public void setOptionD(String optionD) { this.optionD = optionD; }
+    public String getOptionA() {
+        return optionA;
+    }
 
-    public String getCorrectAnswer() { return correctAnswer; }
-    public void setCorrectAnswer(String correctAnswer) { this.correctAnswer = correctAnswer; }
+    public void setOptionA(String optionA) {
+        this.optionA = optionA;
+    }
 
-    public String getExplanation() { return explanation; }
-    public void setExplanation(String explanation) { this.explanation = explanation; }
+    public String getOptionB() {
+        return optionB;
+    }
 
-    public String getDifficulty() { return difficulty; }
-    public void setDifficulty(String difficulty) { this.difficulty = difficulty; }
+    public void setOptionB(String optionB) {
+        this.optionB = optionB;
+    }
+
+    public String getOptionC() {
+        return optionC;
+    }
+
+    public void setOptionC(String optionC) {
+        this.optionC = optionC;
+    }
+
+    public String getOptionD() {
+        return optionD;
+    }
+
+    public void setOptionD(String optionD) {
+        this.optionD = optionD;
+    }
+
+    public String getCorrectAnswer() {
+        return correctAnswer;
+    }
+
+    public void setCorrectAnswer(String correctAnswer) {
+        this.correctAnswer = correctAnswer;
+    }
+
+    public String getExplanation() {
+        return explanation;
+    }
+
+    public void setExplanation(String explanation) {
+        this.explanation = explanation;
+    }
+
+    public String getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
+    }
 }
