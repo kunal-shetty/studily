@@ -20,27 +20,56 @@ public class UserSettings {
     private boolean notifications = true;
 
     public static String safeAccent(String value) {
-        for (String a : ACCENTS) if (a.equals(value)) return a;
+        for (String a : ACCENTS)
+            if (a.equals(value))
+                return a;
         return "gold";
     }
 
     public static String safeModel(String value) {
-        for (String m : AI_MODELS) if (m.equals(value)) return m;
+        for (String m : AI_MODELS)
+            if (m.equals(value))
+                return m;
         return "llama-3.3-70b-versatile";
     }
 
-    public int getUserId() { return userId; }
-    public void setUserId(int userId) { this.userId = userId; }
+    public int getUserId() {
+        return userId;
+    }
 
-    public String getTheme() { return theme; }
-    public void setTheme(String theme) { this.theme = "light".equals(theme) ? "light" : "dark"; }
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
-    public String getAccent() { return accent; }
-    public void setAccent(String accent) { this.accent = safeAccent(accent); }
+    public String getTheme() {
+        return theme;
+    }
 
-    public String getAiModel() { return aiModel; }
-    public void setAiModel(String aiModel) { this.aiModel = UserSettings.safeModel(aiModel); }
+    public void setTheme(String theme) {
+        this.theme = "light".equals(theme) ? "light" : "dark";
+    }
 
-    public boolean isNotifications() { return notifications; }
-    public void setNotifications(boolean notifications) { this.notifications = notifications; }
+    public String getAccent() {
+        return accent;
+    }
+
+    public void setAccent(String accent) {
+        this.accent = safeAccent(accent);
+    }
+
+    public String getAiModel() {
+        return aiModel;
+    }
+
+    public void setAiModel(String aiModel) {
+        this.aiModel = UserSettings.safeModel(aiModel);
+    }
+
+    public boolean isNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(boolean notifications) {
+        this.notifications = notifications;
+    }
 }
