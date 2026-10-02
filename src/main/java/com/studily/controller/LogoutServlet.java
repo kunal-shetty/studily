@@ -12,7 +12,7 @@ import java.io.IOException;
 /**
  * Logout: invalidates the session and lands on the login page.
  */
-@WebServlet(name = "logoutServlet", urlPatterns = {"/logout"})
+@WebServlet(name = "logoutServlet", urlPatterns = { "/logout" })
 public class LogoutServlet extends BaseAppServlet {
 
     @Override
