@@ -6,11 +6,11 @@
 <%@ include file="partials/head.jsp" %>
 <%@ include file="partials/flash.jsp" %>
 <%
-    ProfileData profile = (ProfileData) request.getAttribute("profile");
-    DashboardStats stats = profile.getStats();
-    DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMMM yyyy");
-    String profInitials = profile.getName() == null || profile.getName().isBlank() ? "?"
-            : profile.getName().trim().substring(0, 1).toUpperCase();
+ProfileData profile = (ProfileData) request.getAttribute("profile");
+DashboardStats stats = profile.getStats();
+DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMMM yyyy");
+String profInitials = profile.getName() == null || profile.getName().isBlank() ? "?"
+: profile.getName().trim().substring(0, 1).toUpperCase();
 %>
 <div class="container">
     <div class="profile-hero card rise">
@@ -53,10 +53,10 @@
         <div class="card-title"><span class="icon"><svg class="i"><use href="#i-award"/></svg></span><h3>Badges</h3></div>
         <div class="badge-grid">
             <%
-                boolean anyBadge = false;
-                for (Map.Entry<String, String[]> b : ProfileData.BADGE_META.entrySet()) {
-                    boolean earned = profile.getBadges() != null && profile.getBadges().contains(b.getKey());
-                    if (earned) anyBadge = true;
+            boolean anyBadge = false;
+            for (Map.Entry<String, String[]> b : ProfileData.BADGE_META.entrySet()) {
+            boolean earned = profile.getBadges() != null && profile.getBadges().contains(b.getKey());
+            if (earned) anyBadge = true;
             %>
             <div class="badge-tile <%= earned ? "earned" : "locked" %>">
                 <span class="badge-emoji"><svg class="i i-lg"><use href="#i-<%= b.getValue()[0] %>"/></svg></span>
@@ -77,13 +77,13 @@
             <a class="btn btn-ghost btn-sm" style="margin-left:auto" href="<%= ctx %>/leaderboard">Full board →</a>
         </div>
         <%
-            java.util.List<Map<String, Object>> board = profile.getLeaderboard();
-            if (board == null || board.isEmpty()) {
+        java.util.List<Map<String, Object>> board = profile.getLeaderboard();
+        if (board == null || board.isEmpty()) {
         %>
         <p class="text-dim">No XP earned this week yet. Take a quiz or finish a study session!</p>
         <% } else { %>
-            <% for (Map<String, Object> row : board) {
-                   int pr = (Integer) row.get("rank"); %>
+        <% for (Map<String, Object> row : board) {
+        int pr = (Integer) row.get("rank"); %>
         <div class="list-row <%= ((Integer) row.get("userId")) == navUser.getUserId() ? "highlight" : "" %>">
             <div class="list-main">
                 <div class="list-title">
@@ -95,7 +95,7 @@
                 <span class="badge"><%= row.get("xp") %> XP · <%= row.get("days") %>d active</span>
             </div>
         </div>
-            <% } %>
+        <% } %>
         <% } %>
     </div>
 </div>
