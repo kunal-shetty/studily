@@ -15,7 +15,7 @@ import java.io.IOException;
 /**
  * Login: GET renders the form, POST authenticates.
  */
-@WebServlet(name = "loginServlet", urlPatterns = {"/login"})
+@WebServlet(name = "loginServlet", urlPatterns = { "/login" })
 public class LoginServlet extends BaseAppServlet {
 
     private final AuthService authService = new AuthService();
@@ -41,7 +41,8 @@ public class LoginServlet extends BaseAppServlet {
             User user = authService.login(email, password);
             // Rotate session id to prevent session fixation.
             HttpSession oldSession = request.getSession(false);
-            if (oldSession != null) oldSession.invalidate();
+            if (oldSession != null)
+                oldSession.invalidate();
             HttpSession session = request.getSession(true);
             session.setAttribute(AuthFilter.SESSION_USER, user);
             Flash.success(request, "Welcome back, " + user.getName() + "!");
