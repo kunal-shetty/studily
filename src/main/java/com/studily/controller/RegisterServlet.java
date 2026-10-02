@@ -15,7 +15,7 @@ import java.io.IOException;
 /**
  * Registration: GET renders the form, POST creates the account.
  */
-@WebServlet(name = "registerServlet", urlPatterns = {"/register"})
+@WebServlet(name = "registerServlet", urlPatterns = { "/register" })
 public class RegisterServlet extends BaseAppServlet {
 
     private final AuthService authService = new AuthService();
