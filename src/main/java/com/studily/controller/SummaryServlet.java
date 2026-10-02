@@ -22,7 +22,7 @@ import java.sql.SQLException;
 /**
  * Summary page for a note: parsed from stored JSON plus counts.
  */
-@WebServlet(name = "summaryServlet", urlPatterns = {"/summary"})
+@WebServlet(name = "summaryServlet", urlPatterns = { "/summary" })
 public class SummaryServlet extends BaseAppServlet {
 
     private final NotesDAO notesDAO = new NotesDAO();
