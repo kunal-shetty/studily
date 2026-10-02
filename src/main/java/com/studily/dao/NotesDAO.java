@@ -22,7 +22,7 @@ public class NotesDAO {
     public int insert(int userId, String title, String pdfPath, String extractedText) throws SQLException {
         String sql = "INSERT INTO notes (user_id, title, pdf_path, extracted_text) VALUES (?, ?, ?, ?)";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql, new String[] { "note_id" })) {
+                PreparedStatement ps = con.prepareStatement(sql, new String[] { "note_id" })) {
             ps.setInt(1, userId);
             ps.setString(2, title);
             ps.setString(3, pdfPath);
@@ -38,7 +38,7 @@ public class NotesDAO {
     public void updateSummary(int noteId, String summaryJson) throws SQLException {
         String sql = "UPDATE notes SET summary = ? WHERE note_id = ?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, summaryJson);
             ps.setInt(2, noteId);
             ps.executeUpdate();
@@ -48,9 +48,9 @@ public class NotesDAO {
     /** Fetch a note only if it belongs to the given user. */
     public Note findByIdAndUser(int noteId, int userId) throws SQLException {
         String sql = "SELECT n.note_id, n.user_id, n.title, n.pdf_path, n.extracted_text, n.summary, n.mindmap_json, "
-                   + "n.created_at, n.bookmarked FROM notes n WHERE n.note_id = ? AND n.user_id = ? LIMIT 1";
+                + "n.created_at, n.bookmarked FROM notes n WHERE n.note_id = ? AND n.user_id = ? LIMIT 1";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, noteId);
             ps.setInt(2, userId);
             try (ResultSet rs = ps.executeQuery()) {
@@ -61,14 +61,15 @@ public class NotesDAO {
 
     public List<Note> findRecentByUser(int userId, int limit) throws SQLException {
         String sql = "SELECT note_id, user_id, title, pdf_path, extracted_text, summary, mindmap_json, created_at, bookmarked "
-                   + "FROM notes WHERE user_id = ? ORDER BY bookmarked DESC, created_at DESC LIMIT ?";
+                + "FROM notes WHERE user_id = ? ORDER BY bookmarked DESC, created_at DESC LIMIT ?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, userId);
             ps.setInt(2, limit);
             try (ResultSet rs = ps.executeQuery()) {
                 List<Note> notes = new ArrayList<>();
-                while (rs.next()) notes.add(mapRow(rs));
+                while (rs.next())
+                    notes.add(mapRow(rs));
                 return notes;
             }
         }
@@ -81,7 +82,7 @@ public class NotesDAO {
     public int countByUser(int userId) throws SQLException {
         String sql = "SELECT COUNT(*) FROM notes WHERE user_id = ?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, userId);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next() ? rs.getInt(1) : 0;
@@ -92,7 +93,7 @@ public class NotesDAO {
     public boolean deleteByIdAndUser(int noteId, int userId) throws SQLException {
         String sql = "DELETE FROM notes WHERE note_id = ? AND user_id = ?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, noteId);
             ps.setInt(2, userId);
             return ps.executeUpdate() == 1;
@@ -103,7 +104,7 @@ public class NotesDAO {
     public void setBookmarked(int noteId, int userId, boolean bookmarked) throws SQLException {
         String sql = "UPDATE notes SET bookmarked = ? WHERE note_id = ? AND user_id = ?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setBoolean(1, bookmarked);
             ps.setInt(2, noteId);
             ps.setInt(3, userId);
@@ -115,9 +116,11 @@ public class NotesDAO {
     public void setSubject(int noteId, int userId, Integer subjectId) throws SQLException {
         String sql = "UPDATE notes SET subject_id = ? WHERE note_id = ? AND user_id = ?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-            if (subjectId == null) ps.setNull(1, Types.INTEGER);
-            else ps.setInt(1, subjectId);
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            if (subjectId == null)
+                ps.setNull(1, Types.INTEGER);
+            else
+                ps.setInt(1, subjectId);
             ps.setInt(2, noteId);
             ps.setInt(3, userId);
             ps.executeUpdate();
@@ -128,7 +131,7 @@ public class NotesDAO {
     public void updateMindmap(int noteId, String mindmapJson) throws SQLException {
         String sql = "UPDATE notes SET mindmap_json = ? WHERE note_id = ?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, mindmapJson);
             ps.setInt(2, noteId);
             ps.executeUpdate();
