@@ -15,7 +15,7 @@ public class QuizAnswerDAO {
 
     public void insertBatch(int resultId, int userId, List<QuizAnswer> answers) throws SQLException {
         String sql = "INSERT INTO quiz_answers (result_id, mcq_id, user_id, chosen_answer, is_correct, note_question) "
-                   + "VALUES (?, ?, ?, ?, ?, ?)";
+                + "VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection con = DBConnection.getConnection()) {
             con.setAutoCommit(false);
             try (PreparedStatement ps = con.prepareStatement(sql)) {
@@ -23,8 +23,10 @@ public class QuizAnswerDAO {
                     ps.setInt(1, resultId);
                     ps.setInt(2, a.getMcqId());
                     ps.setInt(3, userId);
-                    if (a.getChosenAnswer() == null) ps.setNull(4, Types.VARCHAR);
-                    else ps.setString(4, a.getChosenAnswer());
+                    if (a.getChosenAnswer() == null)
+                        ps.setNull(4, Types.VARCHAR);
+                    else
+                        ps.setString(4, a.getChosenAnswer());
                     ps.setBoolean(5, a.isCorrect());
                     ps.setString(6, a.getNoteQuestion());
                     ps.addBatch();
@@ -41,15 +43,16 @@ public class QuizAnswerDAO {
     /** Wrongly-answered questions grouped across attempts (weak-topic input). */
     public List<QuizAnswer> findRecentWrong(int userId, int limit) throws SQLException {
         String sql = "SELECT id, result_id, mcq_id, user_id, chosen_answer, is_correct, note_question "
-                   + "FROM quiz_answers WHERE user_id = ? AND is_correct = FALSE "
-                   + "ORDER BY id DESC LIMIT ?";
+                + "FROM quiz_answers WHERE user_id = ? AND is_correct = FALSE "
+                + "ORDER BY id DESC LIMIT ?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, userId);
             ps.setInt(2, limit);
             try (ResultSet rs = ps.executeQuery()) {
                 List<QuizAnswer> list = new ArrayList<>();
-                while (rs.next()) list.add(mapRow(rs));
+                while (rs.next())
+                    list.add(mapRow(rs));
                 return list;
             }
         }
@@ -57,9 +60,9 @@ public class QuizAnswerDAO {
 
     public double accuracyByUser(int userId) throws SQLException {
         String sql = "SELECT COALESCE(AVG(CASE WHEN is_correct THEN 100.0 ELSE 0 END), 0) "
-                   + "FROM quiz_answers WHERE user_id = ?";
+                + "FROM quiz_answers WHERE user_id = ?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+                PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, userId);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next() ? rs.getDouble(1) : 0.0;
